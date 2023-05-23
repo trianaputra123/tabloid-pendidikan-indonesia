@@ -99,7 +99,10 @@
                         <h5 class="card-title">Card title</h5>
                         <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
                             additional content. This content is a little bit longer.</p>
-                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        <div class="row justify-content-between">
+                            <p class="card-text col-5"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            <a href="#" class="col-5 text-end">Lanjut membaca >></a>
+                        </div>
                     </div>
                 </div>
             </div>
