@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('judul');
             $table->text('isi');
             $table->string('gambar');
+            $table->enum('status', ['publish', 'draft'])->default('draft');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
