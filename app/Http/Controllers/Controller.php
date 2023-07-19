@@ -18,9 +18,19 @@ class Controller extends BaseController
         $data = [
             'title' => 'Landing Page',
             'kabupaten' => Kabupaten::all(),
-            'berita' => Berita::all(),
+            'berita' => Berita::where('status', 'publish')->orderBy('created_at', 'desc')->paginate(6),
         ];
         return view('index', $data);
+    }
+
+    public function beritaDetail($slug)
+    {
+        $data = [
+            'title' => 'Detail Berita',
+            'kabupaten' => Kabupaten::all(),
+            'berita' => Berita::where('slug', $slug)->firstOrFail(),
+        ];
+        return view('detail-berita', $data);
     }
 
     public function auth()

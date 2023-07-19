@@ -20,6 +20,16 @@ Route::get('/auth', [Controller::class, 'auth'])->middleware('guest')->name('aut
 Route::post('/login', [Controller::class, 'login'])->middleware('guest')->name('login');
 Route::get('/logout', [Controller::class, 'logout'])->middleware('auth')->name('logout');
 
+// guest
+Route::middleware(['guest'])->name('guest')->group(function () {
+    Route::get('/berita', [Controller::class, 'berita'])->name('.berita');
+    Route::get('/berita/{slug}', [Controller::class, 'beritaDetail'])->name('.berita.detail');
+    Route::get('/berita/tag/{slug}', [Controller::class, 'beritaTag'])->name('.berita.tag');
+    Route::get('/berita/kabupaten/{slug}', [Controller::class, 'beritaKabupaten'])->name('.berita.kabupaten');
+    Route::get('/berita/kecamatan/{slug}', [Controller::class, 'beritaKecamatan'])->name('.berita.kecamatan');
+});
+
+
 Route::middleware(['auth', 'role'])->name('admin')->group(function () {
     Route::get('/home', [AdminController::class, 'home'])->name('.home');
 
@@ -51,6 +61,7 @@ Route::middleware(['auth', 'role'])->name('admin')->group(function () {
         Route::get('/{id}/edit', [AdminController::class, 'beritaEdit'])->name('.edit');
         Route::post('/{id}/edit', [AdminController::class, 'beritaUpdate'])->name('.update');
         Route::delete('/{id}/delete', [AdminController::class, 'beritaDelete'])->name('.delete');
+        Route::put('/{id}/publish', [AdminController::class, 'beritaPublish'])->name('.publish');
 
         // upload image ckeditor
         Route::post('/upload', [AdminController::class, 'upload'])->name('.upload');

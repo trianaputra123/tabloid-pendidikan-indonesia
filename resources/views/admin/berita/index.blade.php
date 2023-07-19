@@ -43,9 +43,26 @@
                         <td>{{ $item->judul }}</td>
                         <td>{{ $item->kecamatan->nama_kecamatan }}</td>
                         <td>{{ $item->kecamatan->kabupaten->nama_kabupaten }}</td>
-                        <td>{{ $item->status }}</td>
+                        <td class="text-center">
+                            @if ($item->status == 'draft')
+                                <span class="badge bg-secondary text-light">{{ Str::upper($item->status) }}</span>
+                            @else
+                                <span class="badge bg-success text-light">{{ Str::upper($item->status) }}</span>
+                            @endif
+                        </td>
                         <td>
                             <a href="{{ route('admin.berita.edit', $item->id) }}" class="btn btn-warning">Edit</a>
+                            <form action="{{ route('admin.berita.publish', $item->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('PUT')
+                                @if ($item->status == 'draft')
+                                    <input type="hidden" name="status" value="publish">
+                                    <button class="btn btn-success">Publikasi</button>
+                                @else
+                                    <input type="hidden" name="status" value="draft">
+                                    <button class="btn btn-secondary">Draf</button>
+                                @endif
+                            </form>
                             <form action="{{ route('admin.berita.delete', $item->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')

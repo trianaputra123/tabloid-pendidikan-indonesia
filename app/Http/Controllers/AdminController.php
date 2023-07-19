@@ -256,6 +256,20 @@ class AdminController extends Controller
         return redirect()->route('admin.berita.index')->with('success', 'Data berhasil dihapus');
     }
 
+    public function beritaPublish(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required'
+        ]);
+
+        $berita = Berita::findOrFail($id);
+        $berita->update([
+            'status' => $request->status
+        ]);
+
+        return redirect()->route('admin.berita.index')->with('success', 'Data berhasil dipublish');
+    }
+
     public function upload(Request $request)
     {
         $request->validate([

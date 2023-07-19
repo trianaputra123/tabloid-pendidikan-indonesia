@@ -23,7 +23,13 @@
                             <p class="card-text col-5"><small class="text-muted">
                                     {{ $latest->created_at->diffForHumans() }}
                                 </small></p>
-                            <a href="#" class="col-5 text-end">Lanjut membaca >></a>
+                            <div class="col-4 mt-1 text-end">
+                                <a href="{{ route('guest.berita.detail', $latest->slug) }}"
+                                    class="btn btn-sm btn-outline-dark">
+                                    {{-- fontawsome eye icon --}}
+                                    <i class="fas fa-eye"></i> Baca
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -33,13 +39,13 @@
         {{-- berita terpopuler --}}
         <div class="col-md-7">
             <h5 style="visibility: hidden;">A</h5>
-            <div class="bg-secondary mb-3" style="height: 270px; position: relative;">
+            <div class="bg-secondary mb-3" style="height: 470px; position: relative;">
                 {{-- <img src="{{ asset('img/card.png') }}" class="w-100 h-100" alt="..."
                 style="object-fit: contain; object-position: center"> --}}
-                <h4 style="position: absolute; left: 33%; top: 40%;">Peringatan Hari Raya</h4>
+                <h4 style="position: absolute; left: 33%; top: 45%;">Peringatan Hari Raya</h4>
             </div>
 
-            <div class="row row-cols-1 row-cols-md-4 g-4">
+            {{-- <div class="row row-cols-1 row-cols-md-4 g-4">
                 <div class="col">
                     <div class="card h-100">
                         <img src="{{ asset('img/card.png') }}" class="card-img-top" alt="{{ asset('img/card.png') }}">
@@ -72,7 +78,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 
@@ -95,53 +101,47 @@
 
     <h5>Berita Lainnya</h5>
     <div class="row row-cols-1 row-cols-md-3 g-4">
-        <div class="col">
-            <div class="card h-100">
-                <img src="{{ asset('img/card.png') }}" class="card-img-top" alt="{{ asset('img/card.png') }}">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
+        @forelse ($berita as $item)
+            <div class="col">
+                <div class="card h-100">
+                    <img src="{{ asset('img/berita/' . $item->gambar) }}" class="card-img-top"
+                        alt="{{ asset('img/berita/' . $item->gambar) }}">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ $item->judul }}
+                        </h5>
+                        <div class="card-text">
+
+                            {{-- clean the content isi from tag --}}
+                            @php
+                                $item->isi = preg_replace('/<[^>]*>/', '', $item->isi);
+                            @endphp
+
+                            {{ Str::limit($item->isi, 100, '...') }}
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row justify-content-between">
+                            <p class="card-text col-5"><small class="text-muted">
+                                    {{ $item->created_at->diffForHumans() }}
+                                </small></p>
+                            <div class="col-4 mt-1 text-end">
+                                <a href="{{ route('guest.berita.detail', $item->slug) }}"
+                                    class="btn btn-sm btn-outline-dark">
+                                    {{-- fontawsome eye icon --}}
+                                    <i class="fas fa-eye"></i> Baca
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                <img src="{{ asset('img/card.png') }}" class="card-img-top" alt="{{ asset('img/card.png') }}">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
+        @empty
+            <div class="col-12">
+                <div class="alert alert-danger text-center" role="alert">
+                    Belum ada berita
                 </div>
             </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                <img src="{{ asset('img/card.png') }}" class="card-img-top" alt="{{ asset('img/card.png') }}">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                <img src="{{ asset('img/card.png') }}" class="card-img-top" alt="{{ asset('img/card.png') }}">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                <img src="{{ asset('img/card.png') }}" class="card-img-top" alt="{{ asset('img/card.png') }}">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                <img src="{{ asset('img/card.png') }}" class="card-img-top" alt="{{ asset('img/card.png') }}">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                </div>
-            </div>
-        </div>
+        @endforelse
     </div>
 @endsection
