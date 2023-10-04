@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\ReporterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,7 +22,7 @@ Route::post('/login', [Controller::class, 'login'])->middleware('guest')->name('
 Route::get('/logout', [Controller::class, 'logout'])->middleware('auth')->name('logout');
 
 // guest
-Route::middleware(['guest'])->name('guest')->group(function () {
+Route::middleware(['guest'])->name('guest')->prefix('/guest')->group(function () {
     Route::get('/berita', [Controller::class, 'berita'])->name('.berita');
     Route::get('/berita/{slug}', [Controller::class, 'beritaDetail'])->name('.berita.detail');
     Route::get('/berita/tag/{slug}', [Controller::class, 'beritaTag'])->name('.berita.tag');
@@ -30,7 +31,7 @@ Route::middleware(['guest'])->name('guest')->group(function () {
 });
 
 
-Route::middleware(['auth', 'role'])->name('admin')->group(function () {
+Route::middleware(['auth', 'role'])->name('admin')->prefix('/admin')->group(function () {
     Route::get('/home', [AdminController::class, 'home'])->name('.home');
 
     // Kabupaten
@@ -65,5 +66,29 @@ Route::middleware(['auth', 'role'])->name('admin')->group(function () {
 
         // upload image ckeditor
         Route::post('/upload', [AdminController::class, 'upload'])->name('.upload');
+    });
+});
+
+Route::middleware(['auth', 'role'])->name('redaksi')->prefix('redaksi')->group(function () {
+    Route::get('/home', [AdminController::class, 'home'])->name('.home');
+
+    // Upload Redaksi ke admin
+
+});
+
+Route::middleware(['auth', 'role'])->name('reporter')->prefix('reporter')->group(function () {
+    Route::get('/home', [ReporterController::class, 'home'])->name('.home');
+
+    // Upload Hasil Liputan
+    Route::prefix('/liputan')->name('.liputan')->group(function () {
+        Route::get('/', [ReporterController::class, 'liputan'])->name('.index');
+        Route::get('/create', [ReporterController::class, 'liputanCreate'])->name('.create');
+        Route::post('/create', [ReporterController::class, 'liputanStore'])->name('.store');
+        Route::get('/{id}/edit', [ReporterController::class, 'liputanEdit'])->name('.edit');
+        Route::post('/{id}/edit', [ReporterController::class, 'liputanUpdate'])->name('.update');
+        Route::delete('/{id}/delete', [ReporterController::class, 'liputanDelete'])->name('.delete');
+
+        // upload image ckeditor
+        Route::post('/upload', [ReporterController::class, 'upload'])->name('.upload');
     });
 });

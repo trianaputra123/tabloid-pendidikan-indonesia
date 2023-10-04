@@ -11,17 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('beritas', function (Blueprint $table) {
+        Schema::create('liputans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('kecamatan_id')->constrained('kecamatans')->onDelete('cascade');
-            $table->foreignId('liputan_id')->constrained('liputans')->onDelete('cascade');
             $table->string('slug')->unique();
             $table->string('judul');
             $table->text('isi');
             $table->string('gambar');
-            $table->bigInteger('like')->default(0);
-            $table->enum('status', ['publish', 'draft', 'ditolak', 'revisi'])->default('draft');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->enum('status', ['mengantri', 'dibuat'])->default('mengantri');
+            $table->foreignId('reporter_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('beritas');
+        Schema::dropIfExists('liputans');
     }
 };

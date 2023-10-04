@@ -13,6 +13,10 @@
     {{-- Fontawesome CDN --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
+    {{-- My CSS --}}
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+    {{-- Other CSS --}}
     @yield('other-css')
     @yield('other-plugin')
 </head>
@@ -22,7 +26,7 @@
     @include('components.other.navbar')
 
     {{-- content --}}
-    <div class="container py-5">
+    <div class="container-fluid py-5">
         @yield('content')
     </div>
 

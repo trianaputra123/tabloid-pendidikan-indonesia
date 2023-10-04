@@ -16,9 +16,11 @@ class Role
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // check user login
+
         if ($request->user()->level == 'admin' && Route::is('admin*')) {
             return $next($request);
-        } else if ($request->user()->level == 'user' && Route::is('user*')) {
+        } else if ($request->user()->level == 'redaksi' && Route::is('redaksi*')) {
             return $next($request);
         } else if ($request->user()->level == 'reporter' && Route::is('reporter*')) {
             return $next($request);

@@ -52,7 +52,13 @@
     <div class="container-fluid">
         <div class="row">
 
-            @include('components.admin.sidebar')
+            @if (Auth::user()->level == 'admin')
+                @include('components.admin.sidebar')
+            @elseif (Auth::user()->level == 'reporter')
+                @include('components.reporter.sidebar')
+            @elseif (Auth::user()->level == 'redaksi')
+                {{-- @include('components.redaksi.sidebar') --}}
+            @endif
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 @yield('content')

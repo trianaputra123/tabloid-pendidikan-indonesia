@@ -19,5 +19,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('/login', [ApiGuest::class, 'login'])->name('api.login');
+
 // Route::get('/', [\App\Http\Controllers\ApiController::class, 'index'])->name('api.index');
 Route::get('/get-berita', [ApiGuest::class, 'getBerita'])->name('api.get.berita');
+Route::get('/get-berita-by-kecamatan/{kecamatan_id}', [ApiGuest::class, 'getBeritaByKecamatan'])->name('api.get.berita.by.kecamatan');
+Route::get('/get-kabupaten', [ApiGuest::class, 'getKabupaten'])->name('api.get.kabupaten');
+Route::get('/get-kecamatan', [ApiGuest::class, 'getKecamatan'])->name('api.get.kecamatan');
+
+// Route::middleware('auth:sanctum')->group(function () {
+Route::post('/upload-berita', [\App\Http\Controllers\ApiUser::class, 'uploadBerita'])->name('api.upload.berita');
+// });

@@ -52,7 +52,12 @@ class Controller extends BaseController
         $credentials = $request->only('email', 'password');
 
         if (auth()->attempt($credentials)) {
-            return redirect()->route('admin.home');
+            // return redirect()->route('admin.home');
+            if (auth()->user()->role == 'admin') {
+                return redirect()->route('admin.home');
+            } else if (auth()->user()->role == 'reporter') {
+                return redirect()->route('reporter.home');
+            }
         }
 
         return redirect()->back()->with('error', 'Invalid credentials');
