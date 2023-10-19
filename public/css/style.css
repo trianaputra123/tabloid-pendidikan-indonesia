@@ -52,6 +52,7 @@
 
 ::-webkit-scrollbar {
     width: 5px;
+    height: 1px;
     border-radius: 5px;
 }
 
@@ -68,3 +69,5 @@
 }
 
 /* edit scroll bar */
+
+/* edit vertical scroll bar */

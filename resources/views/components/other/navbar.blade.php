@@ -19,6 +19,9 @@
                 </form>
                 <ul class="navbar-nav mb-2 ms-3 mb-lg-0">
                     <li class="nav-item">
+                        <a class="nav-link fw-bold m-md-2 mb-3 text-center" href="{{ route('about') }}">About</a>
+                    </li>
+                    <li class="nav-item">
                         @if (Route::is('auth'))
                             <a class="nav-link fw-bold text-dark active app-bg-third m-md-2 my-3 text-center"
                                 aria-current="page" href="{{ route('landing') }}">Beranda</a>
@@ -54,7 +57,7 @@
     <div class="sec-nav app-bg-secondary p-1">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-12">
+                <div class="col-12" style="overflow-y:visible;">
                     <ul class="nav justify-content-start">
                         @forelse ($kabupaten as $item)
                             {{-- <li class="nav-item">

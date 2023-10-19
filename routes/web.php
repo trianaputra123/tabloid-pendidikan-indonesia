@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\RedaksiController;
 use App\Http\Controllers\ReporterController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,7 @@ Route::get('/', [Controller::class, 'index'])->middleware('guest')->name('landin
 Route::get('/auth', [Controller::class, 'auth'])->middleware('guest')->name('auth');
 Route::post('/login', [Controller::class, 'login'])->middleware('guest')->name('login');
 Route::get('/logout', [Controller::class, 'logout'])->middleware('auth')->name('logout');
+Route::get('/about', [Controller::class, 'about'])->name('about');
 
 // guest
 Route::middleware(['guest'])->name('guest')->prefix('/guest')->group(function () {
@@ -67,13 +69,43 @@ Route::middleware(['auth', 'role'])->name('admin')->prefix('/admin')->group(func
         // upload image ckeditor
         Route::post('/upload', [AdminController::class, 'upload'])->name('.upload');
     });
+
+    // sistem informasi
+    Route::prefix('/sistem-informasi')->name('.sistem-informasi')->group(function () {
+        Route::get('/', [AdminController::class, 'sistemInformasi'])->name('.index');
+        Route::get('/create', [AdminController::class, 'sistemInformasiCreate'])->name('.create');
+        Route::post('/create', [AdminController::class, 'sistemInformasiStore'])->name('.store');
+        Route::get('/{id}/edit', [AdminController::class, 'sistemInformasiEdit'])->name('.edit');
+        Route::get('/{id}/change-status', [AdminController::class, 'sistemInformasiChangeStatus'])->name('.change-status');
+        Route::post('/{id}/edit', [AdminController::class, 'sistemInformasiUpdate'])->name('.update');
+        Route::delete('/{id}/delete', [AdminController::class, 'sistemInformasiDelete'])->name('.delete');
+    });
+
+    // Program
+    Route::prefix('/program')->name('.program')->group(function () {
+        Route::get('/', [AdminController::class, 'program'])->name('.index');
+        Route::get('/create', [AdminController::class, 'programCreate'])->name('.create');
+        Route::post('/create', [AdminController::class, 'programStore'])->name('.store');
+        Route::get('/{id}/edit', [AdminController::class, 'programEdit'])->name('.edit');
+        Route::post('/{id}/edit', [AdminController::class, 'programUpdate'])->name('.update');
+        Route::delete('/{id}/delete', [AdminController::class, 'programDelete'])->name('.delete');
+    });
 });
 
 Route::middleware(['auth', 'role'])->name('redaksi')->prefix('redaksi')->group(function () {
-    Route::get('/home', [AdminController::class, 'home'])->name('.home');
+    Route::get('/home', [RedaksiController::class, 'home'])->name('.home');
 
     // Upload Redaksi ke admin
-
+    Route::prefix('/berita-unpublish')->name('.berita-unpublish')->group(function () {
+        Route::get('/', [RedaksiController::class, 'unpublishedBerita'])->name('.index');
+        Route::get('/create', [RedaksiController::class, 'Create'])->name('.create');
+        Route::post('/create', [RedaksiController::class, 'Store'])->name('.store');
+        Route::get('/{id}/create-from-liputan', [RedaksiController::class, 'CreateFromLiputan'])->name('.create-from-liputan');
+        Route::post('/{id}/create-from-liputan', [RedaksiController::class, 'StoreFromLiputan'])->name('.store-from-liputan');
+        Route::get('/{id}/edit', [RedaksiController::class, 'Edit'])->name('.edit');
+        Route::post('/{id}/edit', [RedaksiController::class, 'Update'])->name('.update');
+        Route::delete('/{id}/delete', [RedaksiController::class, 'Delete'])->name('.delete');
+    });
 });
 
 Route::middleware(['auth', 'role'])->name('reporter')->prefix('reporter')->group(function () {
@@ -84,6 +116,7 @@ Route::middleware(['auth', 'role'])->name('reporter')->prefix('reporter')->group
         Route::get('/', [ReporterController::class, 'liputan'])->name('.index');
         Route::get('/create', [ReporterController::class, 'liputanCreate'])->name('.create');
         Route::post('/create', [ReporterController::class, 'liputanStore'])->name('.store');
+        Route::get('/{id}/show', [ReporterController::class, 'liputanShow'])->name('.show');
         Route::get('/{id}/edit', [ReporterController::class, 'liputanEdit'])->name('.edit');
         Route::post('/{id}/edit', [ReporterController::class, 'liputanUpdate'])->name('.update');
         Route::delete('/{id}/delete', [ReporterController::class, 'liputanDelete'])->name('.delete');

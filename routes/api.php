@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApiGuest;
+use App\Http\Controllers\ApiUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,9 @@ Route::get('/get-berita', [ApiGuest::class, 'getBerita'])->name('api.get.berita'
 Route::get('/get-berita-by-kecamatan/{kecamatan_id}', [ApiGuest::class, 'getBeritaByKecamatan'])->name('api.get.berita.by.kecamatan');
 Route::get('/get-kabupaten', [ApiGuest::class, 'getKabupaten'])->name('api.get.kabupaten');
 Route::get('/get-kecamatan', [ApiGuest::class, 'getKecamatan'])->name('api.get.kecamatan');
+// Route::get('/get-berita-by-id/{id}', [ApiUser::class, 'getBeritaById'])->name('api.get.berita.by.id');
+
+Route::get('/get-liputan-by-id/{id}', [ApiUser::class, 'getLiputanById'])->name('api.get.liputan.by.id');
 
 // Route::middleware('auth:sanctum')->group(function () {
 Route::post('/upload-berita', [\App\Http\Controllers\ApiUser::class, 'uploadBerita'])->name('api.upload.berita');

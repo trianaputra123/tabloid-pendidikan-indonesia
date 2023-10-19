@@ -53,14 +53,19 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('reporter.liputan.edit', $item->id) }}" class="btn btn-warning">Edit</a>
-                            <form action="{{ route('reporter.liputan.delete', $item->id) }}" method="POST"
-                                class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-danger"
-                                    onclick="return confirm('Apakah anda yakin ingin menghapus data ini?')">Hapus</button>
-                            </form>
+                            @if ($item->status == 'mengantri')
+                                <a href="{{ route('reporter.liputan.edit', $item->id) }}" class="btn btn-warning">Edit</a>
+                                <form action="{{ route('reporter.liputan.delete', $item->id) }}" method="POST"
+                                    class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-danger"
+                                        onclick="return confirm('Apakah anda yakin ingin menghapus data ini?')">Hapus</button>
+                                </form>
+                            @else
+                                <a href="{{ route('reporter.liputan.show', $item->id) }}"
+                                    class="btn btn-primary btn-sm">Lihat</a>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

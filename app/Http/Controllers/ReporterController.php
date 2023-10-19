@@ -28,6 +28,15 @@ class ReporterController extends Controller
         return view('reporter.index', $data);
     }
 
+    public function liputanShow($id)
+    {
+        $data = [
+            'title' => 'Reporter || Liputan || Detail',
+            'liputan' => Liputan::where('id', $id)->firstOrFail()
+        ];
+        return view('reporter.show', $data);
+    }
+
     public function liputanCreate()
     {
         $data = [

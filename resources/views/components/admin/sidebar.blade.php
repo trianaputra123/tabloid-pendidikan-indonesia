@@ -29,6 +29,20 @@
                     Manajemen Berita
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Route::is('admin.sistem-informasi*') ? 'active' : '' }}"
+                    href="{{ route('admin.sistem-informasi.index') }}">
+                    <span data-feather="file-text"></span>
+                    Manajemen Informasi
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Route::is('admin.program*') ? 'active' : '' }}"
+                    href="{{ route('admin.program.index') }}">
+                    <span data-feather="file-text"></span>
+                    Manajemen Program
+                </a>
+            </li>
         </ul>
 
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">

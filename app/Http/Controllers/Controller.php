@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Berita;
 use App\Models\Kabupaten;
+use App\Models\Program;
+use App\Models\SistemInformasi;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
@@ -68,5 +70,16 @@ class Controller extends BaseController
         auth()->logout();
 
         return redirect()->route('landing');
+    }
+
+    public function about()
+    {
+        $data = [
+            'title' => 'About',
+            'kabupaten' => Kabupaten::all(),
+            'sistem_informasi' => SistemInformasi::all(),
+            'program' => Program::all(),
+        ];
+        return view('about', $data);
     }
 }

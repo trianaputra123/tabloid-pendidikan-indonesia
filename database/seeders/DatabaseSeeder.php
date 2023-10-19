@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Kabupaten;
+use App\Models\Program;
+use App\Models\SistemInformasi;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -14,6 +17,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        Kabupaten::factory(8)->create();
+
         User::factory(10)->create();
 
         User::factory()->create([
@@ -36,5 +41,8 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
             'level' => 'reporter',
         ]);
+
+        SistemInformasi::factory(10)->create();
+        Program::factory(10)->create();
     }
 }

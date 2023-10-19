@@ -4,8 +4,12 @@ admin
 - Menambahkan akun reporter.
 - Dapat melihat arsip berita
 
-reporter
+redaksi
 - Melakukan penulisan berita dan pelaporan tulisan kepada admin.
+- mengupload hari raya
+
+reporter
+- memberikan laporan kepada redaksi tentang isi berita. [Done]
 
 jurnalis
 - Melakukan upload jurnal

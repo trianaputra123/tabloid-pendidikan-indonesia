@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Berita;
+use App\Models\Liputan;
 use Illuminate\Http\Request;
 // Str
 use Illuminate\Support\Str;
@@ -30,6 +31,17 @@ class ApiUser extends Controller
         $data = [
             'status' => true,
             'message' => 'Berhasil mengupload berita',
+        ];
+        return response()->json($data);
+    }
+
+    function getLiputanById($id)
+    {
+        $liputan = Liputan::where('id', $id)->first();
+
+        $data = [
+            'data' => $liputan,
+            'gambar' => json_decode($liputan->gambar)
         ];
         return response()->json($data);
     }

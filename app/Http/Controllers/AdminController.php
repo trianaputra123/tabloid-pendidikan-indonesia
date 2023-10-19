@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Berita;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
+use App\Models\Program;
+use App\Models\SistemInformasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -284,5 +286,193 @@ class AdminController extends Controller
             'uploaded' => true,
             'url' => asset('img/berita/' . $imageName)
         ]);
+    }
+
+    // sistem informasi
+    public function sistemInformasi()
+    {
+        $data = [
+            'title' => 'Admin || Sistem Informasi',
+            'sistem_informasi' => SistemInformasi::all()
+        ];
+        return view('admin.sistem-informasi.index', $data);
+    }
+
+    public function sistemInformasiCreate()
+    {
+        $data = [
+            'title' => 'Admin || Sistem Informasi || Create'
+        ];
+        return view('admin.sistem-informasi.create', $data);
+    }
+
+    public function sistemInformasiStore(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|unique:sistem_informasis,nama',
+            'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'jabatan' => 'required',
+        ]);
+
+        // make slug
+        // $slug = Str::slug($request->nama_sistem_informasi);
+
+        // upload image
+        $imageName = time() . '.' . $request->foto->extension();
+        $request->foto->move(public_path('img/sistem-informasi'), $imageName);
+
+        SistemInformasi::create([
+            'nama' => $request->nama,
+            'foto' => $imageName,
+            'jabatan' => $request->jabatan,
+        ]);
+
+        return redirect()->route('admin.sistem-informasi.index')->with('success', 'Data berhasil ditambahkan');
+    }
+
+    public function sistemInformasiEdit($id)
+    {
+        $data = [
+            'title' => 'Admin || Sistem Informasi || Edit',
+            'sistem_informasi' => SistemInformasi::findOrFail($id)
+        ];
+        return view('admin.sistem-informasi.edit', $data);
+    }
+
+    public function sistemInformasiUpdate($id, Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|unique:sistem_informasis,nama',
+            'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'jabatan' => 'required',
+        ]);
+
+        // // make slug
+        // $slug = Str::slug($request->nama_sistem_informasi);
+
+        // upload image
+        $imageName = time() . '.' . $request->struktur_organisasi->extension();
+        $request->struktur_organisasi->move(public_path('img/sistem-informasi'), $imageName);
+
+        SistemInformasi::findOrFail($id)->update([
+            'nama' => $request->nama,
+            'foto' => $imageName,
+            'jabatan' => $request->jabatan,
+        ]);
+
+        return redirect()->route('admin.sistem-informasi.index')->with('success', 'Data berhasil diubah');
+    }
+
+    // public function sistemInformasiChangeStatus($id)
+    // {
+    //     $sistem_informasi = SistemInformasi::findOrFail($id);
+    //     if ($sistem_informasi->status == 'aktif') {
+    //         $sistem_informasi->update([
+    //             'status' => 'nonaktif'
+    //         ]);
+    //     } else {
+    //         $sistem_informasi->update([
+    //             'status' => 'aktif'
+    //         ]);
+    //     }
+
+    //     return redirect()->route('admin.sistem-informasi.index')->with('success', 'Data berhasil diubah');
+    // }
+
+    public function sistemInformasiDelete($id)
+    {
+        $sistem_informasi = SistemInformasi::findOrFail($id);
+        $sistem_informasi->delete();
+
+        return redirect()->route('admin.sistem-informasi.index')->with('success', 'Data berhasil dihapus');
+    }
+
+    // program
+    public function program()
+    {
+        $data = [
+            'title' => 'Admin || Program',
+            'program' => Program::all()
+        ];
+        return view('admin.program.index', $data);
+    }
+
+    public function programCreate()
+    {
+        $data = [
+            'title' => 'Admin || Program || Create'
+        ];
+        return view('admin.program.create', $data);
+    }
+
+    public function programStore(Request $request)
+    {
+        $request->validate([
+            'nama_program' => 'required|unique:programs,nama_program',
+            'deskripsi' => 'required',
+            'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
+
+        // make slug
+        // $slug = Str::slug($request->nama_program);
+
+        // upload image
+        $imageName = time() . '.' . $request->foto->extension();
+        $request->foto->move(public_path('img/program'), $imageName);
+
+        Program::create([
+            'nama_program' => $request->nama_program,
+            // 'slug' => $slug,
+            'deskripsi' => $request->deskripsi,
+            'foto' => $imageName
+        ]);
+
+        return redirect()->route('admin.program.index')->with('success', 'Data berhasil ditambahkan');
+    }
+
+    public function programEdit($id)
+    {
+        $data = [
+            'title' => 'Admin || Program || Edit',
+            'program' => Program::findOrFail($id)
+        ];
+        return view('admin.program.edit', $data);
+    }
+
+    public function programUpdate($id, Request $request)
+    {
+        $request->validate([
+            'nama_program' => 'required|unique:programs,nama_program,' . $id,
+            'deskripsi' => 'required',
+            'foto' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
+
+        // make slug
+        // $slug = Str::slug($request->nama_program);
+
+        // upload image
+        if ($request->foto) {
+            $imageName = time() . '.' . $request->foto->extension();
+            $request->foto->move(public_path('img/program'), $imageName);
+        } else {
+            $imageName = Program::findOrFail($id)->foto;
+        }
+
+        Program::findOrFail($id)->update([
+            'nama_program' => $request->nama_program,
+            // 'slug' => $slug,
+            'deskripsi' => $request->deskripsi,
+            'foto' => $imageName
+        ]);
+
+        return redirect()->route('admin.program.index')->with('success', 'Data berhasil diubah');
+    }
+
+    public function programDelete($id)
+    {
+        $program = Program::findOrFail($id);
+        $program->delete();
+
+        return redirect()->route('admin.program.index')->with('success', 'Data berhasil dihapus');
     }
 }
