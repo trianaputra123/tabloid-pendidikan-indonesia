@@ -19,6 +19,7 @@ class SistemInformasiFactory extends Factory
         return [
             //
             'nama' => 'Sistem Informasi ' . $this->faker->name,
+            'slug' => $this->faker->slug,
             'jabatan' => $this->faker->jobTitle,
             'foto' => 'foto.jpg'
         ];

@@ -119,4 +119,51 @@ class RedaksiController extends Controller
         ];
         return view('redaksi.unpublish.edit', $data);
     }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'judul' => 'required',
+            'isi' => 'required',
+            'gambar' => 'nullable',
+            'gambar.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            // 'slug' => 'required',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $berita = Berita::findOrFail($id);
+
+            $slug = Str::slug($request->judul . '-' . time());
+
+            if ($request->hasFile('gambar')) {
+                $foto = $request->file('gambar');
+
+                // multiple file
+                foreach ($foto as $f) {
+                    $filename = time() . '-' . $f->getClientOriginalName();
+                    $f->move(public_path('img/berita'), $filename);
+                }
+            }
+
+            $data = [
+                'judul' => $request->judul,
+                'isi' => $request->isi,
+                'gambar' => $filename,
+                'slug' => $slug,
+                'user_id' => auth()->user()->id,
+                'status' => 'draft',
+            ];
+
+            $berita->update($data);
+
+            DB::commit();
+            return redirect()->route('redaksi.berita-unpublish.index')->with('success', 'Berhasil mengubah Berita');
+        } catch (\Throwable $th) {
+            DB::rollback();
+            dd($th);
+            return redirect()->route('redaksi.berita-unpublish.index')->with('error', 'Gagal mengubah Berita');
+        }
+    }
 }

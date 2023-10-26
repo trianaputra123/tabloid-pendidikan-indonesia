@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('sistem_informasis', function (Blueprint $table) {
             $table->id();
+            $table->string('slug')->unique();
             $table->string('nama');
             $table->string('foto');
             $table->string('jabatan');

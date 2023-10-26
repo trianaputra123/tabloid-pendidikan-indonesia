@@ -19,6 +19,7 @@ class ProgramFactory extends Factory
         return [
             //
             'nama_program' => 'Program ' . $this->faker->name,
+            'slug' => $this->faker->slug,
             'deskripsi' => $this->faker->text,
             'foto' => 'foto.jpg'
         ];

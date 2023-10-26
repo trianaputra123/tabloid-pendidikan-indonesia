@@ -191,7 +191,7 @@ class AdminController extends Controller
         ]);
 
         // make slug
-        $slug = Str::slug($request->judul);
+        $slug = Str::slug($request->judul . '-' . time());
 
         // upload image
         $imageName = time() . '.' . $request->gambar->extension();
@@ -229,7 +229,7 @@ class AdminController extends Controller
         ]);
 
         // make slug
-        $slug = Str::slug($request->judul);
+        $slug = Str::slug($request->judul . '-' . time());
 
         // upload image
         if ($request->gambar) {
@@ -315,7 +315,7 @@ class AdminController extends Controller
         ]);
 
         // make slug
-        // $slug = Str::slug($request->nama_sistem_informasi);
+        $slug = Str::slug($request->nama_sistem_informasi . '-' . time());
 
         // upload image
         $imageName = time() . '.' . $request->foto->extension();
@@ -323,6 +323,7 @@ class AdminController extends Controller
 
         SistemInformasi::create([
             'nama' => $request->nama,
+            'slug' => $slug,
             'foto' => $imageName,
             'jabatan' => $request->jabatan,
         ]);
@@ -347,8 +348,8 @@ class AdminController extends Controller
             'jabatan' => 'required',
         ]);
 
-        // // make slug
-        // $slug = Str::slug($request->nama_sistem_informasi);
+        // make slug
+        $slug = Str::slug($request->nama_sistem_informasi . '-' . time());
 
         // upload image
         $imageName = time() . '.' . $request->struktur_organisasi->extension();
@@ -356,6 +357,7 @@ class AdminController extends Controller
 
         SistemInformasi::findOrFail($id)->update([
             'nama' => $request->nama,
+            'slug' => $slug, // 'slug' => $slug,
             'foto' => $imageName,
             'jabatan' => $request->jabatan,
         ]);
@@ -414,7 +416,7 @@ class AdminController extends Controller
         ]);
 
         // make slug
-        // $slug = Str::slug($request->nama_program);
+        $slug = Str::slug($request->nama_program . '-' . time());
 
         // upload image
         $imageName = time() . '.' . $request->foto->extension();
@@ -422,7 +424,7 @@ class AdminController extends Controller
 
         Program::create([
             'nama_program' => $request->nama_program,
-            // 'slug' => $slug,
+            'slug' => $slug,
             'deskripsi' => $request->deskripsi,
             'foto' => $imageName
         ]);
@@ -448,7 +450,7 @@ class AdminController extends Controller
         ]);
 
         // make slug
-        // $slug = Str::slug($request->nama_program);
+        $slug = Str::slug($request->nama_program . '-' . time());
 
         // upload image
         if ($request->foto) {
@@ -460,7 +462,7 @@ class AdminController extends Controller
 
         Program::findOrFail($id)->update([
             'nama_program' => $request->nama_program,
-            // 'slug' => $slug,
+            'slug' => $slug,
             'deskripsi' => $request->deskripsi,
             'foto' => $imageName
         ]);
