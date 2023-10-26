@@ -19,7 +19,7 @@
         <form action="{{ route('redaksi.berita-unpublish.store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
-                <label for="nama_berita1" class="form-label">Judul Liputan</label>
+                <label for="nama_berita1" class="form-label">Judul Berita</label>
                 <input type="text" name="judul" class="form-control" id="nama_berita1" aria-describedby="beritaHelp">
                 <div id="beritaHelp" class="form-text">
                     Masukkan judul berita.

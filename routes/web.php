@@ -102,7 +102,7 @@ Route::middleware(['auth', 'role'])->name('redaksi')->prefix('redaksi')->group(f
         Route::post('/create', [RedaksiController::class, 'Store'])->name('.store');
         Route::get('/{id}/create-from-liputan', [RedaksiController::class, 'CreateFromLiputan'])->name('.create-from-liputan');
         Route::post('/{id}/create-from-liputan', [RedaksiController::class, 'StoreFromLiputan'])->name('.store-from-liputan');
-        Route::get('/{id}/edit', [RedaksiController::class, 'Edit'])->name('.edit');
+        Route::get('/{id}/edit', [RedaksiController::class, 'edit'])->name('.edit');
         Route::post('/{id}/edit', [RedaksiController::class, 'Update'])->name('.update');
         Route::delete('/{id}/delete', [RedaksiController::class, 'Delete'])->name('.delete');
     });

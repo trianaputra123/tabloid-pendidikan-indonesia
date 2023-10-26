@@ -21,7 +21,7 @@
         <form action="{{ route('redaksi.berita-unpublish.store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
-                <label for="nama_berita1" class="form-label">Judul Liputan</label>
+                <label for="nama_berita1" class="form-label">Judul Berita</label>
                 <input type="text" name="judul" class="form-control" id="nama_berita1" aria-describedby="beritaHelp"
                     value="{{ $liputan->judul }}">
                 <div id="beritaHelp" class="form-text">
@@ -75,11 +75,11 @@
                 <div class="row">
                     <div class="col-md-5">
                         {{-- <p>Isi Liputan</p> --}}
-                        <textarea name="liputan" disabled style="width: 100%; height: 100%;" id="liputan-text" readonly></textarea>
+                        <textarea name="liputan" disabled style="width: 100%; height: 100%;" id="liputan-text" readonly>{!! $liputan->isi !!}</textarea>
                     </div>
                     <div class="col-md-7">
                         {{-- <p>Isi yang di telah edit</p> --}}
-                        <textarea class="form-control" name="isi" id="isi" rows="3">{!! $liputan->isi !!}</textarea>
+                        <textarea class="form-control" name="isi" id="isi" rows="3"></textarea>
                     </div>
                 </div>
             </div>

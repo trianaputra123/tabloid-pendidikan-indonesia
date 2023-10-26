@@ -68,6 +68,8 @@ class RedaksiController extends Controller
                     $filename = time() . '-' . $f->getClientOriginalName();
                     $f->move(public_path('img/berita'), $filename);
                 }
+            } else {
+                $filename = $liputan->gambar;
             }
 
             $data = [
@@ -114,6 +116,7 @@ class RedaksiController extends Controller
         $data = [
             'title' => 'Redaksi || Manajemen Liputan dan Berita || Edit',
             'berita' => Berita::findOrFail($id),
+            'liputans' => Liputan::get(),
             // berita where status != publish
             // 'beritas' => Berita::get()->where('status', '!=', 'publish'),
         ];
@@ -145,6 +148,8 @@ class RedaksiController extends Controller
                     $filename = time() . '-' . $f->getClientOriginalName();
                     $f->move(public_path('img/berita'), $filename);
                 }
+            } else {
+                $filename = $berita->gambar;
             }
 
             $data = [
