@@ -243,7 +243,11 @@
         <div class="col-md-5 mb-5">
             @php
                 // ambil data tanpa data yang paling populer
-                $data = $berita->where('id', '!=', $mostPopular->id);
+                if ($mostPopular != null) {
+                    $data = $berita->where('id', '!=', $mostPopular->id);
+                } else {
+                    $data = $berita;
+                }
             @endphp
             @forelse ($data as $item)
                 <div class="row mb-2">
