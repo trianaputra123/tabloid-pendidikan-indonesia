@@ -4,22 +4,17 @@
     <div class="row mb-3">
         {{-- berita terkini --}}
         <div class="col-md-7">
-            @if ($berita->count() > 0)
-                {{-- get latest berita --}}
-                @php
-                    $latest = $berita->sortByDesc('created_at')->first();
-                @endphp
-
+            @if (isset($hari_peringatan))
                 {{-- <h5>Berita Terkini</h5> --}}
                 <div class="card mb-3" style="position: relative">
-                    <img src="{{ asset('img/berita/' . $latest->gambar) }}" class="card-img-top"
+                    <img src="{{ asset('img/hariraya/' . $hari_peringatan->gambar) }}" class="card-img-top"
                         style="height: 400px; object-fit: cover; object-position: center"
-                        alt="{{ asset('img/berita/' . $latest->gambar) }}">
+                        alt="{{ asset('img/hariraya/' . $hari_peringatan->gambar) }}">
                     <div class="card-body app-overlay-bg" style="position: absolute; bottom: 0; width: 100%;">
-                        <h5 class="card-title mb-1">{{ $latest->judul }}</h5>
+                        <h5 class="card-title mb-1">{{ $hari_peringatan->judul }}</h5>
                         {{-- time created --}}
                         <small class="text-dark">
-                            {{ $latest->created_at->diffForHumans() }}
+                            {{ $hari_peringatan->created_at->diffForHumans() }}
                         </small>
                     </div>
                 </div>
@@ -35,17 +30,14 @@
                 style="object-fit: contain; object-position: center"> --}}
                 <h5 class="text-center">Sekapur Sirih</h5>
 
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iusto ab impedit aspernatur laborum. Magni
-                    deserunt et nulla, adipisci eaque, ipsum debitis eveniet natus distinctio voluptates dolor! Laboriosam,
-                    ut commodi nesciunt laborum nemo magni dolore quis facere? Tenetur, alias animi voluptate laborum fuga
-                    aliquam blanditiis? Voluptatibus aperiam ipsum consectetur alias exercitationem esse libero!
-                    Perferendis, quas unde enim perspiciatis veniam asperiores repellat quasi quae natus, animi non quod
-                    maiores id temporibus ducimus beatae modi sapiente nobis explicabo quidem! Ducimus et voluptatem ipsam!
-                </p>
-
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis recusandae libero eum, tempora at et
-                    inventore velit, eaque praesentium laboriosam vel, amet illo numquam adipisci fugiat autem blanditiis?
-                    Sequi reprehenderit fugit dignissimos iure eligendi. Aperiam, qui deleniti. Aut, accusantium iusto.</p>
+                @if ($sekaps)
+                    {!! $sekaps->isi !!}
+                @else
+                    <small>
+                        <i class="fas fa-exclamation-circle"></i>
+                        Belum ada Sekapur Sirih
+                    </small>
+                @endif
             </div>
         </div>
     </div>
@@ -63,9 +55,33 @@
 
                 {{-- <h5>Berita Terkini</h5> --}}
                 <div class="card mb-3" style="position: relative">
-                    <img src="{{ asset('img/berita/' . $latest->gambar) }}" class="card-img-top"
-                        style="height: 400px; object-fit: cover; object-position: center"
-                        alt="{{ asset('img/berita/' . $latest->gambar) }}">
+                    @if (is_array(json_decode($latest->gambar)))
+                        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                @foreach (json_decode($latest->gambar) as $item)
+                                    <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                                        <img src="{{ asset('img/berita/' . $item) }}" class="d-block w-100"
+                                            style="height: 400px; object-fit: cover; object-position: center"
+                                            alt="{{ asset('img/berita/' . $item) }}">
+                                    </div>
+                                @endforeach
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden"></span>
+                            </button>
+                        </div>
+                    @else
+                        <img src="{{ asset('img/berita/' . $latest->gambar) }}" class="card-img-top"
+                            style="height: 400px; object-fit: cover; object-position: center"
+                            alt="{{ asset('img/berita/' . $latest->gambar) }}">
+                    @endif
                     <div class="card-body app-overlay-bg" style="position: absolute; bottom: 0; width: 100%;">
                         <h5 class="card-title mb-1">{{ $latest->judul }}</h5>
                         {{-- time created --}}
@@ -77,17 +93,44 @@
             @endif
         </div>
         <div class="col-md-6">
-            @if ($berita->count() > 0)
+            @if ($berita->count() > 1)
                 {{-- get latest berita --}}
                 @php
-                    $latest = $berita->sortByDesc('created_at')->first();
+                    $latest = $berita
+                        ->sortByDesc('created_at')
+                        ->skip(1)
+                        ->first();
                 @endphp
 
                 {{-- <h5>Berita Terkini</h5> --}}
                 <div class="card mb-3" style="position: relative">
-                    <img src="{{ asset('img/berita/' . $latest->gambar) }}" class="card-img-top"
-                        style="height: 400px; object-fit: cover; object-position: center"
-                        alt="{{ asset('img/berita/' . $latest->gambar) }}">
+                    @if (is_array(json_decode($latest->gambar)))
+                        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                @foreach (json_decode($latest->gambar) as $item)
+                                    <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                                        <img src="{{ asset('img/berita/' . $item) }}" class="d-block w-100"
+                                            style="height: 400px; object-fit: cover; object-position: center"
+                                            alt="{{ asset('img/berita/' . $item) }}">
+                                    </div>
+                                @endforeach
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden"></span>
+                            </button>
+                        </div>
+                    @else
+                        <img src="{{ asset('img/berita/' . $latest->gambar) }}" class="card-img-top"
+                            style="height: 400px; object-fit: cover; object-position: center"
+                            alt="{{ asset('img/berita/' . $latest->gambar) }}">
+                    @endif
                     <div class="card-body app-overlay-bg" style="position: absolute; bottom: 0; width: 100%;">
                         <h5 class="card-title mb-1">{{ $latest->judul }}</h5>
                         {{-- time created --}}
@@ -98,94 +141,35 @@
                 </div>
             @endif
         </div>
-        <div class="col-md-3">
-            @if ($berita->count() > 0)
-                {{-- get latest berita --}}
-                @php
-                    $latest = $berita->sortByDesc('created_at')->first();
-                @endphp
+        @if ($berita->count() > 2)
+            @php
+                $data = $berita->sortByDesc('created_at')->skip(2);
+            @endphp
+            @foreach ($data as $item)
+                <div class="col-md-3">
 
-                {{-- <h5>Berita Terkini</h5> --}}
-                <div class="card mb-3" style="position: relative">
-                    <img src="{{ asset('img/berita/' . $latest->gambar) }}" class="card-img-top"
-                        style="height: 200px; object-fit: cover; object-position: center"
-                        alt="{{ asset('img/berita/' . $latest->gambar) }}">
-                    <div class="card-body app-overlay-bg" style="position: absolute; bottom: 0; width: 100%;">
-                        <h6 class="card-title mb-1">{{ $latest->judul }}</h6>
-                        {{-- time created --}}
-                        {{-- <small class="text-dark">
+                    {{-- <h5>Berita Terkini</h5> --}}
+                    <div class="card mb-3" style="position: relative">
+                        @if (is_array(json_decode($item->gambar)))
+                            <img src="{{ asset('img/berita/' . json_decode($item->gambar)[0]) }}" class="card-img-top"
+                                style="height: 200px; object-fit: cover; object-position: center"
+                                alt="{{ asset('img/berita/' . json_decode($item->gambar)[0]) }}">
+                        @else
+                            <img src="{{ asset('img/berita/' . $item->gambar) }}" class="card-img-top"
+                                style="height: 200px; object-fit: cover; object-position: center"
+                                alt="{{ asset('img/berita/' . $item->gambar) }}">
+                        @endif
+                        <div class="card-body app-overlay-bg" style="position: absolute; bottom: 0; width: 100%;">
+                            <h6 class="card-title mb-1">{{ $item->judul }}</h6>
+                            {{-- time created --}}
+                            {{-- <small class="text-dark">
                             {{ $latest->created_at->diffForHumans() }}
                         </small> --}}
+                        </div>
                     </div>
                 </div>
-            @endif
-        </div>
-        <div class="col-md-3">
-            @if ($berita->count() > 0)
-                {{-- get latest berita --}}
-                @php
-                    $latest = $berita->sortByDesc('created_at')->first();
-                @endphp
-
-                {{-- <h5>Berita Terkini</h5> --}}
-                <div class="card mb-3" style="position: relative">
-                    <img src="{{ asset('img/berita/' . $latest->gambar) }}" class="card-img-top"
-                        style="height: 200px; object-fit: cover; object-position: center"
-                        alt="{{ asset('img/berita/' . $latest->gambar) }}">
-                    <div class="card-body app-overlay-bg" style="position: absolute; bottom: 0; width: 100%;">
-                        <h6 class="card-title mb-1">{{ $latest->judul }}</h6>
-                        {{-- time created --}}
-                        {{-- <small class="text-dark">
-                            {{ $latest->created_at->diffForHumans() }}
-                        </small> --}}
-                    </div>
-                </div>
-            @endif
-        </div>
-        <div class="col-md-3">
-            @if ($berita->count() > 0)
-                {{-- get latest berita --}}
-                @php
-                    $latest = $berita->sortByDesc('created_at')->first();
-                @endphp
-
-                {{-- <h5>Berita Terkini</h5> --}}
-                <div class="card mb-3" style="position: relative">
-                    <img src="{{ asset('img/berita/' . $latest->gambar) }}" class="card-img-top"
-                        style="height: 200px; object-fit: cover; object-position: center"
-                        alt="{{ asset('img/berita/' . $latest->gambar) }}">
-                    <div class="card-body app-overlay-bg" style="position: absolute; bottom: 0; width: 100%;">
-                        <h6 class="card-title mb-1">{{ $latest->judul }}</h6>
-                        {{-- time created --}}
-                        {{-- <small class="text-dark">
-                            {{ $latest->created_at->diffForHumans() }}
-                        </small> --}}
-                    </div>
-                </div>
-            @endif
-        </div>
-        <div class="col-md-3">
-            @if ($berita->count() > 0)
-                {{-- get latest berita --}}
-                @php
-                    $latest = $berita->sortByDesc('created_at')->first();
-                @endphp
-
-                {{-- <h5>Berita Terkini</h5> --}}
-                <div class="card mb-3" style="position: relative">
-                    <img src="{{ asset('img/berita/' . $latest->gambar) }}" class="card-img-top"
-                        style="height: 200px; object-fit: cover; object-position: center"
-                        alt="{{ asset('img/berita/' . $latest->gambar) }}">
-                    <div class="card-body app-overlay-bg" style="position: absolute; bottom: 0; width: 100%;">
-                        <h6 class="card-title mb-1">{{ $latest->judul }}</h6>
-                        {{-- time created --}}
-                        {{-- <small class="text-dark">
-                            {{ $latest->created_at->diffForHumans() }}
-                        </small> --}}
-                    </div>
-                </div>
-            @endif
-        </div>
+            @endforeach
+        @endif
     </div>
 
     <h4>Berita Terpopuler</h4>
@@ -194,29 +178,60 @@
         @if ($berita->count() > 0)
             <div class="col-md-7 mb-5">
                 @php
-                    $latest = $berita->sortByDesc('created_at')->first();
-                @endphp
-                <img src="{{ asset('img/berita/' . $latest->gambar) }}" class="card-img-top mb-3"
-                    style="height: 300px; object-fit: cover; object-position: center"
-                    alt="{{ asset('img/berita/' . $latest->gambar) }}">
+                    // get data that have most like
+                    $like = App\Models\Berita::max('like');
 
-                <h5>SMK TI Bali Global Mewajibkan Siswanya Bisa Menggunakan Laptop</h5>
+                    // get the data with value of most like
+                    $mostPopular = App\Models\Berita::where('like', $like)->first();
+                @endphp
+                @if (is_array(json_decode($mostPopular->gambar)))
+                    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            @foreach (json_decode($mostPopular->gambar) as $item)
+                                <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                                    <img src="{{ asset('img/berita/' . $item) }}" class="d-block w-100"
+                                        style="height: 300px; object-fit: cover; object-position: center"
+                                        alt="{{ asset('img/berita/' . $item) }}">
+                                </div>
+                            @endforeach
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden"></span>
+                        </button>
+                    </div>
+                @else
+                    <img src="{{ asset('img/berita/' . $mostPopular->gambar) }}" class="card-img-top mb-3"
+                        style="height: 300px; object-fit: cover; object-position: center"
+                        alt="{{ asset('img/berita/' . $mostPopular->gambar) }}">
+                @endif
+
+                <h5>
+                    {{ $mostPopular->judul }}
+                </h5>
                 {{-- Created at --}}
                 <h6 class="text-muted mt-3">
                     {{-- icon --}}
                     <i class="fas fa-clock"></i>
-                    {{ $latest->created_at->diffForHumans() }}
+                    {{ $mostPopular->created_at->diffForHumans() }}
                     <i class="me-3"></i>
                     {{-- icon comment --}}
                     <i class="fas fa-comment"></i>
-                    10
+                    {{ $mostPopular->like }}
                 </h6>
 
                 <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam est possimus repudiandae ut quibusdam
-                    voluptatum odit hic ipsam dolore excepturi suscipit, perspiciatis, debitis corrupti blanditiis
-                    aspernatur
-                    voluptatibus quam nulla. Magni?...
+                    @php
+                        $isi = strip_tags($mostPopular->isi);
+                        $isi = substr($isi, 0, 500);
+                    @endphp
+                    {{ $isi }}...
                 </p>
 
                 {{-- button read more --}}
@@ -226,11 +241,21 @@
 
         {{-- list berita lainnya --}}
         <div class="col-md-5 mb-5">
-            @forelse ($berita as $item)
+            @php
+                // ambil data tanpa data yang paling populer
+                $data = $berita->where('id', '!=', $mostPopular->id);
+            @endphp
+            @forelse ($data as $item)
                 <div class="row mb-2">
-                    <img src="{{ asset('img/berita/' . $item->gambar) }}" class="col-4"
-                        style="object-fit: cover; object-position: center"
-                        alt="{{ asset('img/berita/' . $item->gambar) }}">
+                    @if (is_array(json_decode($item->gambar)))
+                        <img src="{{ asset('img/berita/' . json_decode($item->gambar)[0]) }}" class="col-4"
+                            style="object-fit: cover; object-position: center"
+                            alt="{{ asset('img/berita/' . json_decode($item->gambar)[0]) }}">
+                    @else
+                        <img src="{{ asset('img/berita/' . $item->gambar) }}" class="col-4"
+                            style="object-fit: cover; object-position: center"
+                            alt="{{ asset('img/berita/' . $item->gambar) }}">
+                    @endif
                     <div class="col-8">
                         <h6>
                             <a href="#" class="text-decoration-none text-dark">
@@ -294,11 +319,22 @@
 
         {{-- list berita lainnya --}}
         <div class="col-md-5 mb-5">
-            @forelse ($berita as $item)
+            @php
+                // ambil data tanpa data yang paling populer
+                $data = $berita->where('id', '!=', $latest->id);
+                $data = $data->where('kecamatan_id', 1);
+            @endphp
+            @forelse ($data as $item)
                 <div class="row mb-2">
-                    <img src="{{ asset('img/berita/' . $item->gambar) }}" class="col-4"
-                        style="object-fit: cover; object-position: center"
-                        alt="{{ asset('img/berita/' . $item->gambar) }}">
+                    @if (is_array(json_decode($item->gambar)))
+                        <img src="{{ asset('img/berita/' . json_decode($item->gambar)[0]) }}" class="col-4"
+                            style="object-fit: cover; object-position: center"
+                            alt="{{ asset('img/berita/' . json_decode($item->gambar)[0]) }}">
+                    @else
+                        <img src="{{ asset('img/berita/' . $item->gambar) }}" class="col-4"
+                            style="object-fit: cover; object-position: center"
+                            alt="{{ asset('img/berita/' . $item->gambar) }}">
+                    @endif
                     <div class="col-8">
                         <h6>
                             <a href="#" class="text-decoration-none text-dark">

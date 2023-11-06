@@ -250,6 +250,35 @@ class AdminController extends Controller
         return redirect()->route('admin.berita.index')->with('success', 'Data berhasil diubah');
     }
 
+    public function beritaDetailAdmin(Berita $berita)
+    {
+        $data = [
+            'title' => 'Admin || Berita || Detail',
+            'berita' => $berita
+        ];
+        return view('admin.berita.detail', $data);
+    }
+
+    public function beritaTolak(Request $request, Berita $berita)
+    {
+        $request->validate([
+            'saran_revisi' => 'required'
+        ]);
+
+        $berita->update([
+            'status' => 'ditolak'
+        ]);
+
+        $slug = Str::slug($berita->judul . '-' . time());
+
+        $berita->saranRevisi()->create([
+            'isi' => $request->saran_revisi,
+            'slug' => $slug,
+        ]);
+
+        return redirect()->route('admin.berita.index')->with('success', 'Data berhasil ditolak');
+    }
+
     public function beritaDelete($id)
     {
         $berita = Berita::findOrFail($id);
@@ -268,6 +297,11 @@ class AdminController extends Controller
         $berita->update([
             'status' => $request->status
         ]);
+
+        if ($request->status == 'publish') {
+            // delete saran revisi
+            $berita->saranRevisi()->delete();
+        }
 
         return redirect()->route('admin.berita.index')->with('success', 'Data berhasil dipublish');
     }

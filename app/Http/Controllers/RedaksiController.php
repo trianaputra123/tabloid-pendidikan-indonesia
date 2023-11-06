@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Berita;
+use App\Models\HariPeringatan;
 use App\Models\Liputan;
+use App\Models\SekapurSirih;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -67,15 +69,19 @@ class RedaksiController extends Controller
                 foreach ($foto as $f) {
                     $filename = time() . '-' . $f->getClientOriginalName();
                     $f->move(public_path('img/berita'), $filename);
+
+                    $data[] = $filename;
                 }
             } else {
-                $filename = $liputan->gambar;
+                $data = $liputan->gambar;
             }
+
+            $encoded = json_encode($data);
 
             $data = [
                 'judul' => $request->judul,
                 'isi' => $request->isi,
-                'gambar' => $filename,
+                'gambar' => $encoded,
                 'kecamatan_id' => $liputan->kecamatan_id,
                 'liputan_id' => $liputan->id,
                 'slug' => $slug,
@@ -84,6 +90,7 @@ class RedaksiController extends Controller
             ];
 
             Berita::create($data);
+
 
             // update status liputan
             $liputan->update([
@@ -147,18 +154,22 @@ class RedaksiController extends Controller
                 foreach ($foto as $f) {
                     $filename = time() . '-' . $f->getClientOriginalName();
                     $f->move(public_path('img/berita'), $filename);
+
+                    $data[] = $filename;
                 }
+                $encoded = json_encode($data);
             } else {
-                $filename = $berita->gambar;
+                $encoded = $berita->gambar;
             }
+
 
             $data = [
                 'judul' => $request->judul,
                 'isi' => $request->isi,
-                'gambar' => $filename,
+                'gambar' => $encoded,
                 'slug' => $slug,
                 'user_id' => auth()->user()->id,
-                'status' => 'draft',
+                'status' => 'revisi',
             ];
 
             $berita->update($data);
@@ -169,6 +180,119 @@ class RedaksiController extends Controller
             DB::rollback();
             dd($th);
             return redirect()->route('redaksi.berita-unpublish.index')->with('error', 'Gagal mengubah Berita');
+        }
+    }
+
+    public function hariPeringatan()
+    {
+        $hari_peringatan = HariPeringatan::get()->first();
+        $data = [
+            'title' => 'Redaksi || Manajemen Hari Peringatan',
+            'hari_peringatan' => $hari_peringatan,
+        ];
+        return view('redaksi.peringatan.index', $data);
+    }
+
+    public function storeAndUpdate(Request $request)
+    {
+        $request->validate([
+            'judul' => 'required',
+            'gambar' => 'nullable',
+            'gambar.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $hari_peringatan = HariPeringatan::get()->first();
+
+            $slug = Str::slug($request->judul . '-' . time());
+
+            $filename = null;
+
+            if ($request->hasFile('gambar')) {
+                $foto = $request->file('gambar');
+
+                if (!is_array($foto)) {
+                    // single file
+                    $filename = time() . '-' . $foto->getClientOriginalName();
+                    $foto->move(public_path('img/hariraya'), $filename);
+                } else {
+                    // multiple file
+                    foreach ($foto as $f) {
+                        $filename = time() . '-' . $f->getClientOriginalName();
+                        $f->move(public_path('img/hariraya'), $filename);
+                    }
+                }
+            } else {
+                $filename = $hari_peringatan->gambar;
+            }
+
+            $data = [
+                'judul' => $request->judul,
+                'gambar' => $filename,
+                'slug' => $slug,
+            ];
+
+            if ($hari_peringatan) {
+                $hari_peringatan->update($data);
+            } else {
+                HariPeringatan::create($data);
+            }
+
+            DB::commit();
+            return redirect()->route('redaksi.hari-peringatan.index')->with('success', 'Berhasil mengubah Hari Peringatan');
+        } catch (\Throwable $th) {
+            DB::rollback();
+            dd($th);
+            return redirect()->route('redaksi.hari-peringatan.index')->with('error', 'Gagal mengubah Hari Peringatan');
+        }
+    }
+
+    public function sekapurSirih()
+    {
+        $sekaps = SekapurSirih::get()->first();
+
+        $data = [
+            'title' => 'Redaksi || Manajemen Sekapur Sirih',
+            'sekaps' => $sekaps,
+        ];
+
+        return view('redaksi.sekapur-sirih.index', $data);
+    }
+
+    public function storeAndUpdateSekapurSirih(Request $request)
+    {
+        $request->validate([
+            'judul' => 'required',
+            'isi' => 'required',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $sekaps = SekapurSirih::get()->first();
+
+            $slug = Str::slug($request->judul . '-' . time());
+
+            $data = [
+                'judul' => $request->judul,
+                'slug' => $slug,
+                'isi' => $request->isi,
+            ];
+
+            if ($sekaps) {
+                $sekaps->update($data);
+            } else {
+                SekapurSirih::create($data);
+            }
+
+            DB::commit();
+            return redirect()->route('redaksi.sekapur-sirih.index')->with('success', 'Berhasil mengubah Sekapur Sirih');
+        } catch (\Throwable $th) {
+            DB::rollback();
+            dd($th);
+            return redirect()->route('redaksi.sekapur-sirih.index')->with('error', 'Gagal mengubah Sekapur Sirih');
         }
     }
 }

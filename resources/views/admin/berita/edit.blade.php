@@ -59,8 +59,16 @@
             <div class="mb-3">
                 <label for="preview" class="form-label">Preview</label>
                 @if ($berita->gambar != null)
-                    <img src="{{ asset('img/berita' . $berita->gambar) }}" alt="" id="preview" class="img-fluid"
-                        width="200px">
+                    @if (is_array(json_decode($berita->gambar)))
+                        <div class="multiple row row-cols-1 row-cols-md-3 g-4" style="flex-wrap: nowrap; overflow: auto">
+                            @foreach (json_decode($berita->gambar) as $item)
+                                <img src="{{ asset('/img/berita/' . $item) }}" alt="" class="img-fluid">
+                            @endforeach
+                        </div>
+                    @else
+                        <img src="{{ asset('/img/berita/' . $berita->gambar) }}" alt="" id="preview"
+                            class="img-fluid">
+                    @endif
                 @else
                     <img src="" alt="" id="preview" class="img-fluid">
                 @endif

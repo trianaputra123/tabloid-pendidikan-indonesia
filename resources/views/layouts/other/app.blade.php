@@ -16,6 +16,12 @@
     {{-- My CSS --}}
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    {{-- AOS CDN --}}
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+
     {{-- Other CSS --}}
     @yield('other-css')
     @yield('other-plugin')

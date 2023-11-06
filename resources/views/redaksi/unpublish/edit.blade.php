@@ -57,8 +57,16 @@
             <div class="mb-3">
                 <label for="preview" id="images" class="form-label">Preview</label>
                 @if ($berita->gambar != null)
-                    <img src="{{ asset('/img/berita/' . $berita->gambar) }}" alt="" id="preview"
-                        class="img-fluid">
+                    @if (is_array(json_decode($berita->gambar)))
+                        <div class="multiple row row-cols-1 row-cols-md-3 g-4" style="flex-wrap: nowrap; overflow: auto">
+                            @foreach (json_decode($berita->gambar) as $item)
+                                <img src="{{ asset('/img/berita/' . $item) }}" alt="" class="img-fluid">
+                            @endforeach
+                        </div>
+                    @else
+                        <img src="{{ asset('/img/berita/' . $berita->gambar) }}" alt="" id="preview"
+                            class="img-fluid">
+                    @endif
                 @else
                     <img src="" alt="" id="preview" class="img-fluid">
                 @endif
@@ -70,7 +78,7 @@
             {{-- download image from liputans --}}
             {{-- preview image --}}
             <div class="mb-3">
-                <label class="form-label">Download Image From Reporter</label>
+                <label class="form-label mt-3">Download Image From Reporter</label>
                 <div id="images-download" class="row row-cols-1 row-cols-md-6 g-4"
                     style="flex-wrap: nowrap; overflow: auto"></div>
             </div>
@@ -79,9 +87,24 @@
             <div class="mb-3">
                 <label for="isi" class="form-label">Isi Berita</label>
                 <div class="row">
+                    {{-- jika ada saran maka perluhatkan saran --}}
+                    @if ($berita->saranRevisi)
+                        @foreach ($berita->saranRevisi as $item)
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <strong>Admin</strong> memberikan saran revisi pada
+                                {{ $item->created_at->format('d M Y') }}.
+                                <hr style="margin-top: 0;">
+                                <p>{{ $item->isi }}</p>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                        @endforeach
+                    @endif
                     <div class="col-md-5">
                         {{-- <p>Isi Liputan</p> --}}
-                        <textarea name="liputan" disabled style="width: 100%; height: 100%;" id="liputan-text" readonly>{!! $berita->liputan->isi !!}</textarea>
+                        <div name="liputan" disabled style="width: 100%; height: 300px; overflow-y: auto" id="liputan-text"
+                            readonly>
+                            {!! $berita->liputan->isi !!}</div>
                     </div>
                     <div class="col-md-7">
                         {{-- <p>Isi yang di telah edit</p> --}}

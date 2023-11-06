@@ -51,6 +51,10 @@
                         <td class="text-center">
                             @if ($item->status == 'mengantri')
                                 <span class="badge bg-secondary text-light">{{ Str::upper($item->status) }}</span>
+                            @elseif($item->status == 'ditolak')
+                                <span class="badge bg-danger text-light">{{ Str::upper($item->status) }}</span>
+                            @elseif($item->status == 'revisi')
+                                <span class="badge bg-warning text-light">{{ Str::upper($item->status) }}</span>
                             @else
                                 <span class="badge bg-success text-light">{{ Str::upper($item->status) }}</span>
                             @endif

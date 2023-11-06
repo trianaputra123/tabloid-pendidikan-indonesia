@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Berita;
+use App\Models\HariPeringatan;
 use App\Models\Kabupaten;
 use App\Models\Program;
+use App\Models\SekapurSirih;
 use App\Models\SistemInformasi;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -21,6 +23,8 @@ class Controller extends BaseController
             'title' => 'Landing Page',
             'kabupaten' => Kabupaten::all(),
             'berita' => Berita::where('status', 'publish')->orderBy('created_at', 'desc')->paginate(6),
+            'hari_peringatan' => HariPeringatan::get()->first(),
+            'sekaps' => SekapurSirih::get()->first(),
         ];
         return view('index', $data);
     }

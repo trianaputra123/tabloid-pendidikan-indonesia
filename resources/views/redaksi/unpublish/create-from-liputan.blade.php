@@ -75,7 +75,9 @@
                 <div class="row">
                     <div class="col-md-5">
                         {{-- <p>Isi Liputan</p> --}}
-                        <textarea name="liputan" disabled style="width: 100%; height: 100%;" id="liputan-text" readonly>{!! $liputan->isi !!}</textarea>
+                        <div name="liputan" disabled style="width: 100%; height: 300px; overflow-y: auto" id="liputan-text"
+                            readonly>
+                            {!! $liputan->isi !!}</div>
                     </div>
                     <div class="col-md-7">
                         {{-- <p>Isi yang di telah edit</p> --}}
@@ -134,11 +136,21 @@
                         console.log(liputan)
 
                         // download image
-                        for (let i = 0; i < liputan.gambar.length; i++) {
+                        // if not array
+                        if (liputan.gambar.length != undefined) {
+                            for (let i = 0; i < liputan.gambar.length; i++) {
+                                // make element for download image in #images-download
+                                $('#images-download').append(
+                                    `<a href="{{ asset('/img/liputan/') }}/${liputan.gambar[i]}" target="_blank">
+                                        <img src="{{ asset('/img/liputan/') }}/${liputan.gambar[i]}" alt="" class="img-fluid img-thumbnail" style="width: 100%; height: 100%; object-fit: cover;">
+                                        </a>`
+                                );
+                            }
+                        } else {
                             // make element for download image in #images-download
                             $('#images-download').append(
-                                `<a href="{{ asset('/img/liputan/') }}/${liputan.gambar[i]}" target="_blank">
-                                    <img src="{{ asset('/img/liputan/') }}/${liputan.gambar[i]}" alt="" class="img-fluid img-thumbnail" style="width: 100%; height: 100%; object-fit: cover;">
+                                `<a href="{{ asset('/img/liputan/') }}/${liputan.gambar}" target="_blank">
+                                    <img src="{{ asset('/img/liputan/') }}/${liputan.gambar}" alt="" class="img-fluid img-thumbnail" style="width: 100%; height: 100%; object-fit: cover;">
                                     </a>`
                             );
                         }

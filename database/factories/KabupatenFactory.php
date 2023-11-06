@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
  */
 class KabupatenFactory extends Factory
 {
+    static $order = 0;
     /**
      * Define the model's default state.
      *
@@ -74,7 +75,8 @@ class KabupatenFactory extends Factory
         ];
 
         // tentukan data json yang akan diambil
-        $data = $json[fake()->unique()->numberBetween(0, 8)];
+        $data = $json[self::$order];
+        self::$order++;
 
         return [
             'nama_kabupaten' => strtolower($data['name']),

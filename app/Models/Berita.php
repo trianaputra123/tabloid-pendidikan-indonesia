@@ -30,4 +30,9 @@ class Berita extends Model
     {
         return $this->belongsTo(Liputan::class);
     }
+
+    public function saranRevisi()
+    {
+        return $this->hasMany(SaranRevisi::class);
+    }
 }

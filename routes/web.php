@@ -62,6 +62,8 @@ Route::middleware(['auth', 'role'])->name('admin')->prefix('/admin')->group(func
         Route::get('/create', [AdminController::class, 'beritaCreate'])->name('.create');
         Route::post('/create', [AdminController::class, 'beritaStore'])->name('.store');
         Route::get('/{id}/edit', [AdminController::class, 'beritaEdit'])->name('.edit');
+        Route::get('/{berita:slug}/detail', [AdminController::class, 'beritaDetailAdmin'])->name('.detail');
+        Route::post('/{berita:slug}/tolak', [AdminController::class, 'beritaTolak'])->name('.tolak');
         Route::post('/{id}/edit', [AdminController::class, 'beritaUpdate'])->name('.update');
         Route::delete('/{id}/delete', [AdminController::class, 'beritaDelete'])->name('.delete');
         Route::put('/{id}/publish', [AdminController::class, 'beritaPublish'])->name('.publish');
@@ -105,6 +107,18 @@ Route::middleware(['auth', 'role'])->name('redaksi')->prefix('redaksi')->group(f
         Route::get('/{id}/edit', [RedaksiController::class, 'edit'])->name('.edit');
         Route::post('/{id}/edit', [RedaksiController::class, 'Update'])->name('.update');
         Route::delete('/{id}/delete', [RedaksiController::class, 'Delete'])->name('.delete');
+    });
+
+    // Upload Hari Peringatan
+    Route::prefix('/hari-peringatan')->name('.hari-peringatan')->group(function () {
+        Route::get('/', [RedaksiController::class, 'hariPeringatan'])->name('.index');
+        Route::post('/create', [RedaksiController::class, 'storeAndUpdate'])->name('.store');
+    });
+
+    // Upload Sekapur Sirih
+    Route::prefix('/sekapur-sirih')->name('.sekapur-sirih')->group(function () {
+        Route::get('/', [RedaksiController::class, 'sekapurSirih'])->name('.index');
+        Route::post('/create', [RedaksiController::class, 'storeAndUpdateSekapurSirih'])->name('.store');
     });
 });
 

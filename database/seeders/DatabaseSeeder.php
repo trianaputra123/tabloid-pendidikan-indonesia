@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Kabupaten;
+use App\Models\Kecamatan;
 use App\Models\Program;
 use App\Models\SistemInformasi;
 use App\Models\User;
