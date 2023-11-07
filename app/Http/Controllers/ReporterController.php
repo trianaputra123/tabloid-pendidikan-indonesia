@@ -64,12 +64,20 @@ class ReporterController extends Controller
                 $foto = $request->file('gambar');
 
                 // multiple file
-                foreach ($foto as $f) {
-                    $filename = time() . '-' . $f->getClientOriginalName();
-                    $f->move(public_path('img/liputan'), $filename);
+                if (count($foto) > 1) {
+                    foreach ($foto as $f) {
+                        $filename = time() . '-' . $f->getClientOriginalName();
+                        $f->move(public_path('img/liputan'), $filename);
+
+                        // data name file for save to database
+                        $data[] = $filename;
+                    }
+                } else {
+                    $filename = time() . '-' . $foto->getClientOriginalName();
+                    $foto->move(public_path('img/liputan'), $filename);
 
                     // data name file for save to database
-                    $data[] = $filename;
+                    $data = $filename;
                 }
             }
 
@@ -142,12 +150,20 @@ class ReporterController extends Controller
                 $foto = $request->file('gambar');
 
                 // multiple file
-                foreach ($foto as $f) {
-                    $filename = time() . '-' . $f->getClientOriginalName();
-                    $f->move(public_path('img/liputan'), $filename);
+                if (count($foto) > 1) {
+                    foreach ($foto as $f) {
+                        $filename = time() . '-' . $f->getClientOriginalName();
+                        $f->move(public_path('img/liputan'), $filename);
+
+                        // data name file for save to database
+                        $data[] = $filename;
+                    }
+                } else {
+                    $filename = time() . '-' . $foto->getClientOriginalName();
+                    $foto->move(public_path('img/liputan'), $filename);
 
                     // data name file for save to database
-                    $data[] = $filename;
+                    $data = $filename;
                 }
             } else {
                 $data = json_decode($liputan->gambar);
