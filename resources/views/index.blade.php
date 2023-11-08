@@ -321,7 +321,9 @@
                         alt="{{ asset('img/berita/' . $latest->gambar) }}">
                 @endif
 
-                <h5>SMK TI Bali Global Mewajibkan Siswanya Bisa Menggunakan Laptop</h5>
+                <h5>
+                    {{ $latest->judul }}
+                </h5>
                 {{-- Created at --}}
                 <h6 class="text-muted mt-3">
                     {{-- icon --}}
@@ -334,10 +336,11 @@
                 </h6>
 
                 <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam est possimus repudiandae ut quibusdam
-                    voluptatum odit hic ipsam dolore excepturi suscipit, perspiciatis, debitis corrupti blanditiis
-                    aspernatur
-                    voluptatibus quam nulla. Magni?...
+                    @php
+                        $isi = strip_tags($latest->isi);
+                        $isi = substr($isi, 0, 500);
+                    @endphp
+                    {{ $isi }}...
                 </p>
 
                 {{-- button read more --}}
