@@ -352,10 +352,25 @@
         <div class="col-md-5 mb-5">
             @php
                 // ambil data tanpa data yang paling populer
-                $data = $berita->where('id', '!=', $latest->id);
-                $data = $data->where('kecamatan_id', 1);
+                $data = $kabupaten->where('id', $latest->kecamatan->kabupaten->id);
+                $data = $data->first()->kecamatan->sortByDesc('created_at');
+                $data2 = [];
+                foreach ($data as $key => $value) {
+                    // check if this kecamatan have berita
+                    if ($value->berita->count() == 0) {
+                        // delete this kecamatan
+                        unset($data[$key]);
+                    } else {
+                        // get the all berita
+                        foreach ($value->berita as $key2 => $value2) {
+                            if ($value2->status == 'publish' && $value2->id != $latest->id) {
+                                array_push($data2, $value2);
+                            }
+                        }
+                    }
+                }
             @endphp
-            @forelse ($data as $item)
+            @forelse ($data2 as $item)
                 <div class="row mb-2">
                     @if (is_array(json_decode($item->gambar)))
                         <img src="{{ asset('img/berita/' . json_decode($item->gambar)[0]) }}" class="col-4"
