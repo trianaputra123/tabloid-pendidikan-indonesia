@@ -183,6 +183,31 @@ class RedaksiController extends Controller
         }
     }
 
+    public function delete($id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $berita = Berita::findOrFail($id);
+
+            if ($berita->gambar) {
+                $gambar = json_decode($berita->gambar);
+                foreach ($gambar as $g) {
+                    unlink(public_path('img/berita/' . $g));
+                }
+            }
+
+            $berita->delete();
+
+            DB::commit();
+            return redirect()->route('redaksi.berita-unpublish.index')->with('success', 'Berhasil menghapus Berita');
+        } catch (\Throwable $th) {
+            DB::rollback();
+            dd($th);
+            return redirect()->route('redaksi.berita-unpublish.index')->with('error', 'Gagal menghapus Berita');
+        }
+    }
+
     public function hariPeringatan()
     {
         $hari_peringatan = HariPeringatan::get()->first();
