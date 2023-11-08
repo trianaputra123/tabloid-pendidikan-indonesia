@@ -192,8 +192,19 @@ class RedaksiController extends Controller
 
             if ($berita->gambar) {
                 $gambar = json_decode($berita->gambar);
-                foreach ($gambar as $g) {
-                    unlink(public_path('img/berita/' . $g));
+
+                if (is_array($gambar)) {
+                    foreach ($gambar as $g) {
+                        // check if image exists in folder
+                        if (file_exists(public_path('img/berita/' . $g))) {
+                            unlink(public_path('img/berita/' . $g));
+                        }
+                    }
+                } else {
+                    // check if image exists in folder
+                    if (file_exists(public_path('img/berita/' . $gambar))) {
+                        unlink(public_path('img/berita/' . $gambar));
+                    }
                 }
             }
 
