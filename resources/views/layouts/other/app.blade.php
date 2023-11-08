@@ -42,21 +42,28 @@
                 <div class="container-fluid">
                     <button class="" id="sidebarToggle" style="background-color: transparent; border: none"><i
                             class="fas fa-bars text-white"></i></button>
+                    {{-- logo --}}
+                    <a class="navbar-brand text-white ms-3" href="{{ route('landing') }}">
+                        <img src="{{ asset('img/logo.png') }}" alt="" height="30"
+                            class="d-inline-block align-text-top">
+                        Tabloid Pendi.Indo
+                    </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation"><span
                             class="navbar-toggler-icon"></span></button>
-                    {{-- logo --}}
-                    <a class="navbar-brand text-white ms-3" href="{{ route('landing') }}">
-                        <img src="{{ asset('img/logo.png') }}" alt="" width="30" height="30"
-                            class="d-inline-block align-text-top">
-                        Tabloid Pendi.Indo
-                    </a>
                     {{-- search --}}
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                            {{-- search --}}
+                            <form class="d-flex mx-2">
+                                <input class="form-control me-2" type="search" placeholder="Search"
+                                    aria-label="Search">
+                                <button class="btn btn-outline-light" type="submit">Search</button>
+                            </form>
+
                             {{-- about --}}
-                            <li class="nav-item">
+                            <li class="nav-item mx-2">
                                 <a class="nav-link text-white" href="{{ route('about') }}">About</a>
                             </li>
                             {{-- button login & register --}}
@@ -79,11 +86,10 @@
                                 </li>
                             @else
                                 <li class="nav-item">
-                                    <a class="nav-link text-white mx-2 app-bg-primary"
-                                        href="{{ route('auth') }}">Login</a>
+                                    <a class="nav-link text-white mx-2" href="{{ route('auth') }}">Login</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-white ms-2 app-bg-primary" href="#">Register</a>
+                                    <a class="nav-link text-white ms-2" href="#">Register</a>
                                 </li>
                             @endif
                         </ul>
