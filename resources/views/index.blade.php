@@ -105,7 +105,7 @@
                 {{-- <h5>Berita Terkini</h5> --}}
                 <div class="card mb-3" style="position: relative">
                     @if (is_array(json_decode($latest->gambar)))
-                        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                        <div id="carouselExampleControls1" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-inner">
                                 @foreach (json_decode($latest->gambar) as $item)
                                     <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
@@ -115,12 +115,12 @@
                                     </div>
                                 @endforeach
                             </div>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls1"
                                 data-bs-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden"></span>
                             </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls1"
                                 data-bs-slide="next">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden"></span>
@@ -185,7 +185,7 @@
                     $mostPopular = App\Models\Berita::where('like', $like)->first();
                 @endphp
                 @if (is_array(json_decode($mostPopular->gambar)))
-                    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                    <div id="carouselExampleControls2" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
                             @foreach (json_decode($mostPopular->gambar) as $item)
                                 <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
@@ -195,12 +195,12 @@
                                 </div>
                             @endforeach
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls2"
                             data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden"></span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls2"
                             data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden"></span>
@@ -293,9 +293,33 @@
                         ->sortByDesc('created_at')
                         ->first();
                 @endphp
-                <img src="{{ asset('img/berita/' . $latest->gambar) }}" class="card-img-top mb-3"
-                    style="height: 300px; object-fit: cover; object-position: center"
-                    alt="{{ asset('img/berita/' . $latest->gambar) }}">
+                @if (is_array(json_decode($latest->gambar)))
+                    <div id="carouselExampleControls3" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            @foreach (json_decode($latest->gambar) as $item)
+                                <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                                    <img src="{{ asset('img/berita/' . $item) }}" class="d-block w-100"
+                                        style="height: 300px; object-fit: cover; object-position: center"
+                                        alt="{{ asset('img/berita/' . $item) }}">
+                                </div>
+                            @endforeach
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls3"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls3"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden"></span>
+                        </button>
+                    </div>
+                @else
+                    <img src="{{ asset('img/berita/' . $latest->gambar) }}" class="card-img-top mb-3"
+                        style="height: 300px; object-fit: cover; object-position: center"
+                        alt="{{ asset('img/berita/' . $latest->gambar) }}">
+                @endif
 
                 <h5>SMK TI Bali Global Mewajibkan Siswanya Bisa Menggunakan Laptop</h5>
                 {{-- Created at --}}

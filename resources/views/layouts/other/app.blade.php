@@ -89,7 +89,9 @@
             {{-- content --}}
             <div class="container-fluid px-0 py-5" style="height: 100vh; overflow-y: auto">
                 <div class="container-fluid">
-                    @yield('content')
+                    <div class="container">
+                        @yield('content')
+                    </div>
                 </div>
                 @include('components.other.footer')
             </div>
