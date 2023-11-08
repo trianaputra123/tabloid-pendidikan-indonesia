@@ -74,7 +74,7 @@ class ReporterController extends Controller
                     }
                 } else {
                     $filename = time() . '-' . $foto[0]->getClientOriginalName();
-                    $foto->move(public_path('img/liputan'), $filename);
+                    $foto[0]->move(public_path('img/liputan'), $filename);
 
                     // data name file for save to database
                     $data = $filename;
@@ -160,7 +160,7 @@ class ReporterController extends Controller
                     }
                 } else {
                     $filename = time() . '-' . $foto[0]->getClientOriginalName();
-                    $foto->move(public_path('img/liputan'), $filename);
+                    $foto[0]->move(public_path('img/liputan'), $filename);
 
                     // data name file for save to database
                     $data = $filename;
