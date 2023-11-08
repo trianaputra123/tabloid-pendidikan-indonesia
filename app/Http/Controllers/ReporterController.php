@@ -54,7 +54,7 @@ class ReporterController extends Controller
             'judul' => 'required',
             'isi' => 'required',
             'gambar' => 'nullable',
-            'gambar.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'gambar.*' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
             'kecamatan_id' => 'required',
             // 'slug' => 'required',
         ]);
@@ -122,7 +122,7 @@ class ReporterController extends Controller
             'judul' => 'required',
             'isi' => 'required',
             'gambar' => 'nullable',
-            'gambar.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'gambar.*' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
             'kecamatan_id' => 'required',
             // 'slug' => 'required',
         ]);
