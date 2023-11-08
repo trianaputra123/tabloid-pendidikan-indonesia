@@ -50,7 +50,7 @@ class RedaksiController extends Controller
             'judul' => 'required',
             'isi' => 'required',
             'gambar' => 'nullable',
-            'gambar.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'gambar.*' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
             'liputan_id' => 'required',
             // 'slug' => 'required',
         ]);
@@ -136,7 +136,7 @@ class RedaksiController extends Controller
             'judul' => 'required',
             'isi' => 'required',
             'gambar' => 'nullable',
-            'gambar.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'gambar.*' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
             // 'slug' => 'required',
         ]);
 
