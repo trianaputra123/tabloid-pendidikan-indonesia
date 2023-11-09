@@ -234,7 +234,8 @@
                     $mostPopular = App\Models\Berita::where('like', $like)->first();
                 @endphp
                 @if (is_array(json_decode($mostPopular->gambar)))
-                    <div id="carouselExampleControls2" class="carousel slide" data-bs-ride="carousel">
+                    <div style="margin-bottom: 15px" id="carouselExampleControls2" class="carousel slide"
+                        data-bs-ride="carousel">
                         <div class="carousel-inner">
                             @foreach (json_decode($mostPopular->gambar) as $item)
                                 <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
@@ -314,9 +315,17 @@
                             alt="{{ asset('img/berita/' . json_decode($item->gambar)) }}">
                     @endif
                     <div class="col-8">
+                        @php
+                            if (strlen($item->judul) > 70) {
+                                $judul = substr(strip_tags($item->judul), 0, 70);
+                                $judul .= '...';
+                            } else {
+                                $judul = strip_tags($item->judul);
+                            }
+                        @endphp
                         <h6>
                             <a href="#" class="text-decoration-none text-dark">
-                                {{ $item->judul }}
+                                {{ $judul }}
                             </a>
                         </h6>
                         <hr>
@@ -336,18 +345,19 @@
         </div>
     </div>
 
-    <h4>Berita Daerah Kab. Buleleng</h4>
+    <h4>Berita Daerah {{ $kecamatanPopularName }}</h4>
     <div class="row flex-row-reverse">
         @php
             $latest = $berita
-                ->where('kecamatan_id', 1)
+                ->where('kecamatan_id', $kecamatanPopulerId)
                 ->sortByDesc('created_at')
                 ->first();
         @endphp
         @if ($latest)
             <div class="col-md-7 mb-5">
                 @if (is_array(json_decode($latest->gambar)))
-                    <div id="carouselExampleControls3" class="carousel slide" data-bs-ride="carousel">
+                    <div style="margin-bottom: 15px" id="carouselExampleControls3" class="carousel slide"
+                        data-bs-ride="carousel">
                         <div class="carousel-inner">
                             @foreach (json_decode($latest->gambar) as $item)
                                 <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
@@ -439,9 +449,17 @@
                             alt="{{ asset('img/berita/' . json_decode($item->gambar)) }}">
                     @endif
                     <div class="col-8">
+                        @php
+                            if (strlen($item->judul) > 70) {
+                                $judul = substr(strip_tags($item->judul), 0, 70);
+                                $judul .= '...';
+                            } else {
+                                $judul = strip_tags($item->judul);
+                            }
+                        @endphp
                         <h6>
                             <a href="#" class="text-decoration-none text-dark">
-                                {{ $item->judul }}
+                                {{ $judul }}
                             </a>
                         </h6>
                         <hr>

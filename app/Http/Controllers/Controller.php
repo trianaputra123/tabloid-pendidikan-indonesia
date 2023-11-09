@@ -21,12 +21,21 @@ class Controller extends BaseController
 
     public function index()
     {
+        $kecamatanPopulerId = Berita::select('kecamatan_id', DB::raw('count(*) as total'))
+            ->groupBy('kecamatan_id')
+            ->orderBy('total', 'desc')
+            ->limit(1)
+            ->get()
+            ->first();
+
         $data = [
             'title' => 'Landing Page',
             'kabupaten' => Kabupaten::all(),
             'berita' => Berita::where('status', 'publish')->orderBy('created_at', 'desc')->paginate(6),
             'hari_peringatan' => HariPeringatan::get()->first(),
             'sekaps' => SekapurSirih::get()->first(),
+            'kecamatanPopulerId' => $kecamatanPopulerId ? $kecamatanPopulerId->kecamatan->id : null,
+            'kecamatanPopularName' => $kecamatanPopulerId ? $kecamatanPopulerId->kecamatan->nama_kecamatan : null,
         ];
         return view('index', $data);
     }
@@ -98,6 +107,8 @@ class Controller extends BaseController
         $data['password'] = bcrypt($data['password']);
 
         $user = User::create($data);
+
+        auth()->loginUsingId($user->id);
 
         return redirect()->route('user.home');
     }
