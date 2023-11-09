@@ -78,23 +78,23 @@
                             </button>
                         </div>
                     @else
-                        <img src="{{ asset('img/berita/' . $latest->gambar) }}" class="card-img-top"
+                        <img src="{{ asset('img/berita/' . json_decode($latest->gambar)) }}" class="card-img-top"
                             style="height: 400px; object-fit: cover; object-position: center"
-                            alt="{{ asset('img/berita/' . $latest->gambar) }}">
+                            alt="{{ asset('img/berita/' . json_decode($latest->gambar)) }}">
                     @endif
                     <div class="card-body app-overlay-bg" style="position: absolute; bottom: 0; width: 100%;">
                         <h5 class="card-title mb-1">{{ $latest->judul }}</h5>
                         {{-- like button --}}
                         <div class="d-flex justify-content-between">
-                            <form action="#" method="POST">
+                            <form action="{{ route('like', $latest) }}" method="POST" id="like-{{ $latest->id }}-yes">
                                 @csrf
                                 {{-- time created --}}
                                 <small class="text-dark">
                                     {{ $latest->created_at->diffForHumans() }}
                                 </small>
-                                <button type="submit" class="app-color-primary like-button">
-                                    <i class="fas fa-thumbs-up like-icon"></i>
-                                    {{ $latest->like }}
+                                <button type="button" class="app-color-primary like-button">
+                                    <i class="fas fa-heart like-icon" onload="checkers_like({{ $latest->id }})"></i>
+                                    <span class="like-number">{{ $latest->like }}</span>
                                 </button>
                             </form>
                         </div>
@@ -137,23 +137,23 @@
                             </button>
                         </div>
                     @else
-                        <img src="{{ asset('img/berita/' . $latest->gambar) }}" class="card-img-top"
+                        <img src="{{ asset('img/berita/' . json_decode($latest->gambar)) }}" class="card-img-top"
                             style="height: 400px; object-fit: cover; object-position: center"
-                            alt="{{ asset('img/berita/' . $latest->gambar) }}">
+                            alt="{{ asset('img/berita/' . json_decode($latest->gambar)) }}">
                     @endif
                     <div class="card-body app-overlay-bg" style="position: absolute; bottom: 0; width: 100%;">
                         <h5 class="card-title mb-1">{{ $latest->judul }}</h5>
                         {{-- like button --}}
                         <div class="d-flex justify-content-between">
-                            <form action="#" method="POST">
+                            <form action="{{ route('like', $latest) }}" method="POST" id="like-{{ $latest->id }}-yes">
                                 @csrf
                                 {{-- time created --}}
                                 <small class="text-dark">
                                     {{ $latest->created_at->diffForHumans() }}
                                 </small>
-                                <button type="submit" class="app-color-primary like-button">
-                                    <i class="fas fa-thumbs-up like-icon"></i>
-                                    {{ $latest->like }}
+                                <button type="button" class="app-color-primary like-button">
+                                    <i class="fas fa-heart like-icon" onload="checkers_like({{ $latest->id }})"></i>
+                                    <span class="like-number">{{ $latest->like }}</span>
                                 </button>
                             </form>
                         </div>
@@ -175,9 +175,9 @@
                                 style="height: 200px; object-fit: cover; object-position: center"
                                 alt="{{ asset('img/berita/' . json_decode($item->gambar)[0]) }}">
                         @else
-                            <img src="{{ asset('img/berita/' . $item->gambar) }}" class="card-img-top"
+                            <img src="{{ asset('img/berita/' . json_decode($item->gambar)) }}" class="card-img-top"
                                 style="height: 200px; object-fit: cover; object-position: center"
-                                alt="{{ asset('img/berita/' . $item->gambar) }}">
+                                alt="{{ asset('img/berita/' . json_decode($item->gambar)) }}">
                         @endif
                         <div class="card-body app-overlay-bg" style="position: absolute; bottom: 0; width: 100%;">
                             @php
@@ -190,18 +190,19 @@
                             @endphp
                             <h6 class="card-title mb-1">{{ $judul }}</h6>
                             {{-- like button --}}
-                            <form action="#" method="POST">
-                                <div class="d-flex justify-content-between">
-                                    @csrf
-                                    {{-- time created --}}
-                                    <small class="text-dark">
-                                        {{ $item->created_at->diffForHumans() }}
-                                    </small>
-                                    <button type="submit" class="app-color-primary like-button">
-                                        <i class="fas fa-thumbs-up like-icon"></i>
-                                        {{ $item->like }}
-                                    </button>
-                                </div>
+                            <form action="{{ route('like', $item) }}" method="POST"
+                                class="d-flex justify-content-between" id="like-{{ $item->id }}-yes">
+                                {{-- <div class="d-flex justify-content-between"> --}}
+                                @csrf
+                                {{-- time created --}}
+                                <small class="text-dark">
+                                    {{ $item->created_at->diffForHumans() }}
+                                </small>
+                                <button type="button" class="app-color-primary like-button">
+                                    <i class="fas fa-heart like-icon" onload="checkers_like({{ $item->id }})"></i>
+                                    <span class="like-number">{{ $item->like }}</span>
+                                </button>
+                                {{-- </div> --}}
                             </form>
 
                             {{-- time created --}}
@@ -250,9 +251,9 @@
                         </button>
                     </div>
                 @else
-                    <img src="{{ asset('img/berita/' . $mostPopular->gambar) }}" class="card-img-top mb-3"
+                    <img src="{{ asset('img/berita/' . json_decode($mostPopular->gambar)) }}" class="card-img-top mb-3"
                         style="height: 300px; object-fit: cover; object-position: center"
-                        alt="{{ asset('img/berita/' . $mostPopular->gambar) }}">
+                        alt="{{ asset('img/berita/' . json_decode($mostPopular->gambar)) }}">
                 @endif
 
                 <h5>
@@ -266,6 +267,10 @@
                     <i class="me-3"></i>
                     {{-- icon comment --}}
                     <i class="fas fa-comment"></i>
+                    {{ count($mostPopular->komentar) }}
+                    <i class="me-3"></i>
+                    {{-- love icon --}}
+                    <i class="fas fa-heart"></i>
                     {{ $mostPopular->like }}
                 </h6>
 
@@ -286,7 +291,7 @@
         <div class="col-md-5 mb-5">
             @php
                 // ambil data tanpa data yang paling populer
-                if ($mostPopular != null) {
+                if (isset($mostPopular)) {
                     $data = $berita->where('id', '!=', $mostPopular->id);
                 } else {
                     $data = $berita;
@@ -299,9 +304,9 @@
                             style="object-fit: cover; object-position: center"
                             alt="{{ asset('img/berita/' . json_decode($item->gambar)[0]) }}">
                     @else
-                        <img src="{{ asset('img/berita/' . $item->gambar) }}" class="col-4"
+                        <img src="{{ asset('img/berita/' . json_decode($item->gambar)) }}" class="col-4"
                             style="object-fit: cover; object-position: center"
-                            alt="{{ asset('img/berita/' . $item->gambar) }}">
+                            alt="{{ asset('img/berita/' . json_decode($item->gambar)) }}">
                     @endif
                     <div class="col-8">
                         <h6>
@@ -359,9 +364,9 @@
                         </button>
                     </div>
                 @else
-                    <img src="{{ asset('img/berita/' . $latest->gambar) }}" class="card-img-top mb-3"
+                    <img src="{{ asset('img/berita/' . json_decode($latest->gambar)) }}" class="card-img-top mb-3"
                         style="height: 300px; object-fit: cover; object-position: center"
-                        alt="{{ asset('img/berita/' . $latest->gambar) }}">
+                        alt="{{ asset('img/berita/' . json_decode($latest->gambar)) }}">
                 @endif
 
                 <h5>
@@ -424,9 +429,9 @@
                             style="object-fit: cover; object-position: center"
                             alt="{{ asset('img/berita/' . json_decode($item->gambar)[0]) }}">
                     @else
-                        <img src="{{ asset('img/berita/' . $item->gambar) }}" class="col-4"
+                        <img src="{{ asset('img/berita/' . json_decode($item->gambar)) }}" class="col-4"
                             style="object-fit: cover; object-position: center"
-                            alt="{{ asset('img/berita/' . $item->gambar) }}">
+                            alt="{{ asset('img/berita/' . json_decode($item->gambar)) }}">
                     @endif
                     <div class="col-8">
                         <h6>
@@ -450,4 +455,152 @@
             @endforelse
         </div>
     </div>
+@endsection
+
+@section('other-js')
+    <script>
+        // async function for get like
+        async function getlike(id) {
+            var like = false;
+            await $.ajax({
+                url: '/get-like/' + id,
+                type: 'GET',
+                success: function(data) {
+                    console.log(data);
+                    like = data.data.like;
+                }
+            });
+
+            return like;
+        }
+
+        // async function for like
+        async function likes(id) {
+            await $.ajax({
+                url: '/like/' + id,
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                },
+                success: function(data) {
+                    console.log(data);
+                    like = data.status;
+                }
+            });
+        }
+
+        async function checkers_like(id) {
+            var checkers = await getlike(id);
+
+            if (checkers) {
+                // change color to like
+                $('#like-' + id + '-yes').children('.like-button').removeClass(
+                    'app-color-primary');
+                // change color to like
+                $('#like-' + id + '-yes').children('.like-button').addClass(
+                    'text-pink');
+                // change color to like
+                $('#like-' + id + '-yes').children('.like-button').children(
+                    '.like-number').text(like);
+            } else {
+                // change color to unlike
+                $('#like-' + id + '-yes').children('.like-button').addClass(
+                    'app-color-primary');
+                // change color to unlike
+                $('#like-' + id + '-yes').children('.like-button').removeClass(
+                    'text-pink');
+                // change color to like
+                $('#like-' + id + '-yes').children('.like-button').children(
+                    '.like-number').text(like);
+            }
+        }
+
+
+        $(document).ready(async function() {
+            $('.like-button').click(async function() {
+                // $(this).toggleClass('app-color-primary');
+                // $(this).toggleClass('text-white');
+                // $(this).children('.like-icon').toggleClass('text-white');
+
+                // get id
+                var id = $(this).parent().attr('id');
+                id = id.split('-')[1];
+
+                // get like
+                var like = $('#like-' + id + '-yes').children('.like-button').children(
+                    '.like-number').text();
+                like = parseInt(like);
+
+                var checkers = await getlike(id);
+
+                // update like
+                $('#like-' + id + '-yes').children('.like-button').children(
+                    '.like-number').text(like);
+
+                console.log(like);
+
+                // send request
+                await likes(id);
+
+                // get like
+                var checkers = await getlike(id);
+
+                if (checkers) {
+                    // ganti nomor ribuan, jutaan
+
+
+                    // change color to like
+                    $('#like-' + id + '-yes').children('.like-button').removeClass(
+                        'app-color-primary');
+                    // change color to like
+                    $('#like-' + id + '-yes').children('.like-button').addClass(
+                        'text-pink');
+                    // change color to like
+                    $('#like-' + id + '-yes').children('.like-button').children(
+                        '.like-number').text(like);
+                } else {
+                    // change color to unlike
+                    $('#like-' + id + '-yes').children('.like-button').addClass(
+                        'app-color-primary');
+                    // change color to unlike
+                    $('#like-' + id + '-yes').children('.like-button').removeClass(
+                        'text-pink');
+                    // change color to like
+                    $('#like-' + id + '-yes').children('.like-button').children(
+                        '.like-number').text(like);
+                }
+
+                // check if like or not
+                if (checkers) {
+                    // like
+                    like += 1;
+                    // change color to like
+                    $('#like-' + id + '-yes').children('.like-button').removeClass(
+                        'app-color-primary');
+                    // change color to like
+                    $('#like-' + id + '-yes').children('.like-button').addClass(
+                        'text-pink');
+                    // change color to like
+                    $('#like-' + id + '-yes').children('.like-button').children(
+                        '.like-number').text(like);
+                } else {
+                    // unlike
+                    like -= 1;
+                    // change color to unlike
+                    $('#like-' + id + '-yes').children('.like-button').addClass(
+                        'app-color-primary');
+                    // change color to unlike
+                    $('#like-' + id + '-yes').children('.like-button').removeClass(
+                        'text-pink');
+                    // change color to like
+                    $('#like-' + id + '-yes').children('.like-button').children(
+                        '.like-number').text(like);
+                }
+
+                // update like
+                $('#like-' + id + '-yes').children('.like-button').children(
+                    '.like-number').text(like);
+            });
+        });
+    </script>
 @endsection

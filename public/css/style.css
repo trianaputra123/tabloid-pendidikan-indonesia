@@ -41,7 +41,8 @@
 }
 
 .app-overlay-bg {
-    background-color: #a4dffcb7;
+    background-color: #ffffffb7;
+    /* background-color: #a4dffcb7; */
 }
 
 .app-base-80-bg {
@@ -92,4 +93,8 @@
 .like-button:hover .like-icon {
     transition: all 0.3s ease-in-out;
     transform: scale(1.1);
+}
+
+.text-pink {
+    color: rgb(255, 120, 183);
 }

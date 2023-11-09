@@ -35,4 +35,9 @@ class Berita extends Model
     {
         return $this->hasMany(SaranRevisi::class);
     }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
 }
