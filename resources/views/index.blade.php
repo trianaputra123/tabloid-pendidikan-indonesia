@@ -334,7 +334,7 @@
                 ->sortByDesc('created_at')
                 ->first();
         @endphp
-        @if ($latest->count() > 0)
+        @if ($latest)
             <div class="col-md-7 mb-5">
                 @if (is_array(json_decode($latest->gambar)))
                     <div id="carouselExampleControls3" class="carousel slide" data-bs-ride="carousel">
