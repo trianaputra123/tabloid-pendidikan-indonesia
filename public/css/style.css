@@ -71,3 +71,25 @@
 /* edit scroll bar */
 
 /* edit vertical scroll bar */
+
+.like-button {
+    margin-left: 10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+    z-index: 1;
+}
+
+.like-icon {
+    fill: none;
+    height: 100%;
+    transition: all 0.3s ease-in-out;
+    width: 100%;
+}
+
+.like-button:hover .like-icon {
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.1);
+}

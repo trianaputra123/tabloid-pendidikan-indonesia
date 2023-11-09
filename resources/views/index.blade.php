@@ -84,10 +84,20 @@
                     @endif
                     <div class="card-body app-overlay-bg" style="position: absolute; bottom: 0; width: 100%;">
                         <h5 class="card-title mb-1">{{ $latest->judul }}</h5>
-                        {{-- time created --}}
-                        <small class="text-dark">
-                            {{ $latest->created_at->diffForHumans() }}
-                        </small>
+                        {{-- like button --}}
+                        <div class="d-flex justify-content-between">
+                            <form action="#" method="POST">
+                                @csrf
+                                {{-- time created --}}
+                                <small class="text-dark">
+                                    {{ $latest->created_at->diffForHumans() }}
+                                </small>
+                                <button type="submit" class="app-color-primary like-button">
+                                    <i class="fas fa-thumbs-up like-icon"></i>
+                                    {{ $latest->like }}
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             @endif
@@ -133,10 +143,20 @@
                     @endif
                     <div class="card-body app-overlay-bg" style="position: absolute; bottom: 0; width: 100%;">
                         <h5 class="card-title mb-1">{{ $latest->judul }}</h5>
-                        {{-- time created --}}
-                        <small class="text-dark">
-                            {{ $latest->created_at->diffForHumans() }}
-                        </small>
+                        {{-- like button --}}
+                        <div class="d-flex justify-content-between">
+                            <form action="#" method="POST">
+                                @csrf
+                                {{-- time created --}}
+                                <small class="text-dark">
+                                    {{ $latest->created_at->diffForHumans() }}
+                                </small>
+                                <button type="submit" class="app-color-primary like-button">
+                                    <i class="fas fa-thumbs-up like-icon"></i>
+                                    {{ $latest->like }}
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             @endif
@@ -160,7 +180,30 @@
                                 alt="{{ asset('img/berita/' . $item->gambar) }}">
                         @endif
                         <div class="card-body app-overlay-bg" style="position: absolute; bottom: 0; width: 100%;">
-                            <h6 class="card-title mb-1">{{ $item->judul }}</h6>
+                            @php
+                                $judul = strip_tags($item->judul);
+                                $judul = substr($judul, 0, 20);
+
+                                if (strlen($item->judul) > 20) {
+                                    $judul .= '...';
+                                }
+                            @endphp
+                            <h6 class="card-title mb-1">{{ $judul }}</h6>
+                            {{-- like button --}}
+                            <form action="#" method="POST">
+                                <div class="d-flex justify-content-between">
+                                    @csrf
+                                    {{-- time created --}}
+                                    <small class="text-dark">
+                                        {{ $item->created_at->diffForHumans() }}
+                                    </small>
+                                    <button type="submit" class="app-color-primary like-button">
+                                        <i class="fas fa-thumbs-up like-icon"></i>
+                                        {{ $item->like }}
+                                    </button>
+                                </div>
+                            </form>
+
                             {{-- time created --}}
                             {{-- <small class="text-dark">
                             {{ $latest->created_at->diffForHumans() }}

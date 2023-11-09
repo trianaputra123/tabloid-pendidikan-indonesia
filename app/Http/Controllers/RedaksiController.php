@@ -73,7 +73,20 @@ class RedaksiController extends Controller
                     $data[] = $filename;
                 }
             } else {
-                $data = $liputan->gambar;
+                if ($liputan->gambar) {
+                    $data = json_decode($liputan->gambar);
+
+                    // copy file from liputan to berita
+                    if (is_array($data)) {
+                        foreach ($data as $d) {
+                            copy(public_path('img/liputan/' . $d), public_path('img/berita/' . $d));
+                        }
+                    } else {
+                        copy(public_path('img/liputan/' . $data), public_path('img/berita/' . $data));
+                    }
+                } else {
+                    $data = null;
+                }
             }
 
             $encoded = json_encode($data);
@@ -207,6 +220,11 @@ class RedaksiController extends Controller
                     }
                 }
             }
+            // change status liputan
+            $liputan = Liputan::findOrFail($berita->liputan_id);
+            $liputan->update([
+                'status' => 'mengantri'
+            ]);
 
             $berita->delete();
 

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('kecamatan_id')->constrained('kecamatans')->onDelete('cascade');
             $table->string('slug')->unique();
-            $table->string('judul');
-            $table->text('isi');
+            $table->text('judul');
+            $table->longText('isi');
             $table->string('gambar');
             $table->enum('status', ['mengantri', 'dibuat'])->default('mengantri');
             $table->foreignId('reporter_id')->constrained('users')->onDelete('cascade');

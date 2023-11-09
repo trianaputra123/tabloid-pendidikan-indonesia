@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('kecamatan_id')->constrained('kecamatans')->onDelete('cascade');
             $table->foreignId('liputan_id')->constrained('liputans')->onDelete('cascade');
             $table->string('slug')->unique();
-            $table->string('judul');
-            $table->text('isi');
+            $table->text('judul');
+            $table->longText('isi');
             $table->string('gambar');
             $table->bigInteger('like')->default(0);
             $table->enum('status', ['publish', 'draft', 'ditolak', 'revisi'])->default('draft');
