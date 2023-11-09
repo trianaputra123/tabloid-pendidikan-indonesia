@@ -328,14 +328,14 @@
 
     <h4>Berita Daerah Kab. Buleleng</h4>
     <div class="row flex-row-reverse">
-        @if ($berita->count() > 0)
+        @php
+            $latest = $berita
+                ->where('kecamatan_id', 1)
+                ->sortByDesc('created_at')
+                ->first();
+        @endphp
+        @if ($latest->count() > 0)
             <div class="col-md-7 mb-5">
-                @php
-                    $latest = $berita
-                        ->where('kecamatan_id', 1)
-                        ->sortByDesc('created_at')
-                        ->first();
-                @endphp
                 @if (is_array(json_decode($latest->gambar)))
                     <div id="carouselExampleControls3" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
