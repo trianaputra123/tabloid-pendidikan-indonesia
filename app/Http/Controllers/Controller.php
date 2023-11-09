@@ -99,7 +99,7 @@ class Controller extends BaseController
 
         $user = User::create($data);
 
-        return redirect()->route('admin.home');
+        return redirect()->route('user.home');
     }
 
     public function logout()
