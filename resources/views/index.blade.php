@@ -92,7 +92,8 @@
                                 <small class="text-dark">
                                     {{ $latest->created_at->diffForHumans() }}
                                 </small>
-                                <button type="button" class="app-color-primary like-button">
+                                <button type="button" class="app-color-primary like-button"
+                                    {{ Auth::check() ? '' : 'disabled' }}>
                                     <i class="fas fa-heart like-icon" onload="checkers_like({{ $latest->id }})"></i>
                                     <span class="like-number">{{ $latest->like }}</span>
                                 </button>
@@ -151,7 +152,8 @@
                                 <small class="text-dark">
                                     {{ $latest->created_at->diffForHumans() }}
                                 </small>
-                                <button type="button" class="app-color-primary like-button">
+                                <button type="button" class="app-color-primary like-button"
+                                    {{ Auth::check() ? '' : 'disabled' }}>
                                     <i class="fas fa-heart like-icon" onload="checkers_like({{ $latest->id }})"></i>
                                     <span class="like-number">{{ $latest->like }}</span>
                                 </button>
@@ -198,7 +200,8 @@
                                 <small class="text-dark">
                                     {{ $item->created_at->diffForHumans() }}
                                 </small>
-                                <button type="button" class="app-color-primary like-button">
+                                <button type="button" class="app-color-primary like-button"
+                                    {{ Auth::check() ? '' : 'disabled' }}>
                                     <i class="fas fa-heart like-icon" onload="checkers_like({{ $item->id }})"></i>
                                     <span class="like-number">{{ $item->like }}</span>
                                 </button>
@@ -487,122 +490,145 @@
                 success: function(data) {
                     console.log(data);
                     like = data.status;
+                },
+                error: function(data) {
+                    // redirect to login page
+                    // alert
+                    alert('Login terlebih dahulu');
+                    window.location.href = '/login';
                 }
             });
         }
 
         async function checkers_like(id) {
-            var checkers = await getlike(id);
-
-            if (checkers) {
-                // change color to like
-                $('#like-' + id + '-yes').children('.like-button').removeClass(
-                    'app-color-primary');
-                // change color to like
-                $('#like-' + id + '-yes').children('.like-button').addClass(
-                    'text-pink');
-                // change color to like
-                $('#like-' + id + '-yes').children('.like-button').children(
-                    '.like-number').text(like);
+            if ($('.like-button').attr('disabled')) {
+                console.log('disabled');
+                $('.like-button').click(function() {
+                    confirm('Login terlebih dahulu');
+                    window.location.href = '/login';
+                });
             } else {
-                // change color to unlike
-                $('#like-' + id + '-yes').children('.like-button').addClass(
-                    'app-color-primary');
-                // change color to unlike
-                $('#like-' + id + '-yes').children('.like-button').removeClass(
-                    'text-pink');
-                // change color to like
-                $('#like-' + id + '-yes').children('.like-button').children(
-                    '.like-number').text(like);
+                var checkers = await getlike(id);
+
+                if (checkers) {
+                    // change color to like
+                    $('#like-' + id + '-yes').children('.like-button').removeClass(
+                        'app-color-primary');
+                    // change color to like
+                    $('#like-' + id + '-yes').children('.like-button').addClass(
+                        'text-pink');
+                    // change color to like
+                    $('#like-' + id + '-yes').children('.like-button').children(
+                        '.like-number').text(like);
+                } else {
+                    // change color to unlike
+                    $('#like-' + id + '-yes').children('.like-button').addClass(
+                        'app-color-primary');
+                    // change color to unlike
+                    $('#like-' + id + '-yes').children('.like-button').removeClass(
+                        'text-pink');
+                    // change color to like
+                    $('#like-' + id + '-yes').children('.like-button').children(
+                        '.like-number').text(like);
+                }
             }
         }
 
 
         $(document).ready(async function() {
-            $('.like-button').click(async function() {
-                // $(this).toggleClass('app-color-primary');
-                // $(this).toggleClass('text-white');
-                // $(this).children('.like-icon').toggleClass('text-white');
+            // if like-button is disabled
+            if ($('.like-button').attr('disabled')) {
+                console.log('disabled');
+                $('.like-button').click(function() {
+                    confirm('Login terlebih dahulu');
+                    window.location.href = '/login';
+                });
+            } else {
+                $('.like-button').click(async function() {
+                    // $(this).toggleClass('app-color-primary');
+                    // $(this).toggleClass('text-white');
+                    // $(this).children('.like-icon').toggleClass('text-white');
 
-                // get id
-                var id = $(this).parent().attr('id');
-                id = id.split('-')[1];
+                    // get id
+                    var id = $(this).parent().attr('id');
+                    id = id.split('-')[1];
 
-                // get like
-                var like = $('#like-' + id + '-yes').children('.like-button').children(
-                    '.like-number').text();
-                like = parseInt(like);
+                    // get like
+                    var like = $('#like-' + id + '-yes').children('.like-button').children(
+                        '.like-number').text();
+                    like = parseInt(like);
 
-                var checkers = await getlike(id);
+                    var checkers = await getlike(id);
 
-                // update like
-                $('#like-' + id + '-yes').children('.like-button').children(
-                    '.like-number').text(like);
-
-                console.log(like);
-
-                // send request
-                await likes(id);
-
-                // get like
-                var checkers = await getlike(id);
-
-                if (checkers) {
-                    // ganti nomor ribuan, jutaan
-
-
-                    // change color to like
-                    $('#like-' + id + '-yes').children('.like-button').removeClass(
-                        'app-color-primary');
-                    // change color to like
-                    $('#like-' + id + '-yes').children('.like-button').addClass(
-                        'text-pink');
-                    // change color to like
+                    // update like
                     $('#like-' + id + '-yes').children('.like-button').children(
                         '.like-number').text(like);
-                } else {
-                    // change color to unlike
-                    $('#like-' + id + '-yes').children('.like-button').addClass(
-                        'app-color-primary');
-                    // change color to unlike
-                    $('#like-' + id + '-yes').children('.like-button').removeClass(
-                        'text-pink');
-                    // change color to like
-                    $('#like-' + id + '-yes').children('.like-button').children(
-                        '.like-number').text(like);
-                }
 
-                // check if like or not
-                if (checkers) {
-                    // like
-                    like += 1;
-                    // change color to like
-                    $('#like-' + id + '-yes').children('.like-button').removeClass(
-                        'app-color-primary');
-                    // change color to like
-                    $('#like-' + id + '-yes').children('.like-button').addClass(
-                        'text-pink');
-                    // change color to like
-                    $('#like-' + id + '-yes').children('.like-button').children(
-                        '.like-number').text(like);
-                } else {
-                    // unlike
-                    like -= 1;
-                    // change color to unlike
-                    $('#like-' + id + '-yes').children('.like-button').addClass(
-                        'app-color-primary');
-                    // change color to unlike
-                    $('#like-' + id + '-yes').children('.like-button').removeClass(
-                        'text-pink');
-                    // change color to like
-                    $('#like-' + id + '-yes').children('.like-button').children(
-                        '.like-number').text(like);
-                }
+                    console.log(like);
 
-                // update like
-                $('#like-' + id + '-yes').children('.like-button').children(
-                    '.like-number').text(like);
-            });
+                    // send request
+                    await likes(id);
+
+                    // get like
+                    var checkers = await getlike(id);
+
+                    if (checkers) {
+                        // ganti nomor ribuan, jutaan
+
+
+                        // change color to like
+                        $('#like-' + id + '-yes').children('.like-button').removeClass(
+                            'app-color-primary');
+                        // change color to like
+                        $('#like-' + id + '-yes').children('.like-button').addClass(
+                            'text-pink');
+                        // change color to like
+                        $('#like-' + id + '-yes').children('.like-button').children(
+                            '.like-number').text(like);
+                    } else {
+                        // change color to unlike
+                        $('#like-' + id + '-yes').children('.like-button').addClass(
+                            'app-color-primary');
+                        // change color to unlike
+                        $('#like-' + id + '-yes').children('.like-button').removeClass(
+                            'text-pink');
+                        // change color to like
+                        $('#like-' + id + '-yes').children('.like-button').children(
+                            '.like-number').text(like);
+                    }
+
+                    // check if like or not
+                    if (checkers) {
+                        // like
+                        like += 1;
+                        // change color to like
+                        $('#like-' + id + '-yes').children('.like-button').removeClass(
+                            'app-color-primary');
+                        // change color to like
+                        $('#like-' + id + '-yes').children('.like-button').addClass(
+                            'text-pink');
+                        // change color to like
+                        $('#like-' + id + '-yes').children('.like-button').children(
+                            '.like-number').text(like);
+                    } else {
+                        // unlike
+                        like -= 1;
+                        // change color to unlike
+                        $('#like-' + id + '-yes').children('.like-button').addClass(
+                            'app-color-primary');
+                        // change color to unlike
+                        $('#like-' + id + '-yes').children('.like-button').removeClass(
+                            'text-pink');
+                        // change color to like
+                        $('#like-' + id + '-yes').children('.like-button').children(
+                            '.like-number').text(like);
+                    }
+
+                    // update like
+                    $('#like-' + id + '-yes').children('.like-button').children(
+                        '.like-number').text(like);
+                });
+            }
         });
     </script>
 @endsection
