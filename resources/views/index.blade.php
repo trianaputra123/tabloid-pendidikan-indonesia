@@ -222,8 +222,10 @@
         @if ($berita->count() > 0)
             <div class="col-md-7 mb-5">
                 @php
-                    // get data that have most like
-                    $like = App\Models\Berita::max('like');
+                    // get data that have most like in this week
+                    $like = App\Models\Berita::whereBetween('created_at', [Carbon\Carbon::now()->startOfWeek(), Carbon\Carbon::now()->endOfWeek()])->first();
+
+                    $like = $like->max('like');
 
                     // get the data with value of most like
                     $mostPopular = App\Models\Berita::where('like', $like)->first();
