@@ -395,7 +395,11 @@
                     <i class="me-3"></i>
                     {{-- icon comment --}}
                     <i class="fas fa-comment"></i>
-                    10
+                    {{ count($latest->komentar) }}
+                    <i class="me-3"></i>
+                    {{-- love icon --}}
+                    <i class="fas fa-heart"></i>
+                    {{ $latest->like }}
                 </h6>
 
                 <p>
