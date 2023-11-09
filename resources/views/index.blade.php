@@ -395,8 +395,12 @@
         <div class="col-md-5 mb-5">
             @php
                 // ambil data tanpa data yang paling populer
-                $data = $kabupaten->where('id', $latest->kecamatan->kabupaten->id);
-                $data = $data->first()->kecamatan->sortByDesc('created_at');
+                if ($latest != null) {
+                    $data = $kabupaten->where('id', $latest->kecamatan->kabupaten->id);
+                    $data = $data->first()->kecamatan->sortByDesc('created_at');
+                } else {
+                    $data = [];
+                }
                 $data2 = [];
                 foreach ($data as $key => $value) {
                     // check if this kecamatan have berita
