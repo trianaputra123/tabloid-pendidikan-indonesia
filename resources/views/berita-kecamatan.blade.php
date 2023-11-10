@@ -1,46 +1,22 @@
 @extends('layouts.other.app')
 
-@section('content')
+@section('hero')
     <div class="row mb-3">
-        {{-- berita terkini --}}
-        <div class="col-md-7">
-            @if (isset($hari_peringatan))
-                {{-- <h5>Berita Terkini</h5> --}}
-                <div class="card mb-3" style="position: relative">
-                    <img src="{{ asset('img/hariraya/' . $hari_peringatan->gambar) }}" class="card-img-top"
-                        style="height: 400px; object-fit: cover; object-position: center"
-                        alt="{{ asset('img/hariraya/' . $hari_peringatan->gambar) }}">
-                    <div class="card-body app-overlay-bg" style="position: absolute; bottom: 0; width: 100%;">
-                        <h5 class="card-title mb-1">{{ $hari_peringatan->judul }}</h5>
-                        {{-- time created --}}
-                        <small class="text-dark">
-                            {{ $hari_peringatan->created_at->diffForHumans() }}
-                        </small>
-                    </div>
-                </div>
-            @endif
-        </div>
-
-        {{-- berita terpopuler --}}
-        <div class="col-md-5">
-            {{-- <h5 style="visibility: hidden;">A</h5> --}}
-            <div class="app-bg-base mb-3 p-3"
-                style="height: 400px; object-fit: cover; object-position: center; position: relative; overflow: auto;">
-                {{-- <img src="{{ asset('img/card.png') }}" class="w-100 h-100" alt="..."
-                style="object-fit: contain; object-position: center"> --}}
-                <h5 class="text-center">Sekapur Sirih</h5>
-
-                @if ($sekaps)
-                    {!! $sekaps->isi !!}
-                @else
-                    <small>
-                        <i class="fas fa-exclamation-circle"></i>
-                        Belum ada Sekapur Sirih
-                    </small>
-                @endif
+        {{-- gambar kec with overlay text --}}
+        <div class="col-12" style="position: relative">
+            <img src="{{ asset('img/kecamatan/' . $kecamatan_now->gambar) }}" class="img-fluid"
+                style="height: 400px; width: 100%; object-fit: cover; object-position: center"
+                alt="{{ $kecamatan_now->gambar }}">
+            <div class="app-overlay-dark-bg row justify-content-center align-items-center"
+                style="position: absolute; bottom: 0; width: 100%; height: 100%;">
+                {{-- nama_kecamatan_now --}}
+                <h1 class="text-white text-center">{{ $kecamatan_now->nama_kecamatan }}</h1>
             </div>
         </div>
     </div>
+@endsection
+
+@section('content')
 
     {{-- sekapur sirih --}}
     <h4>Berita Terbaru</h4>
@@ -284,7 +260,9 @@
             <div class="col-md-7 mb-5">
                 @php
                     // get data that have most like in this week
-                    $like = App\Models\Berita::whereBetween('created_at', [Carbon\Carbon::now()->startOfWeek(), Carbon\Carbon::now()->endOfWeek()])->first();
+                    $like = App\Models\Berita::whereBetween('created_at', [Carbon\Carbon::now()->startOfWeek(), Carbon\Carbon::now()->endOfWeek()])
+                        ->where('kecamatan_id', $kecamatan_now->id)
+                        ->get();
 
                     $like = $like->max('like');
 
@@ -373,170 +351,6 @@
                 }
             @endphp
             @forelse ($data as $item)
-                <div class="row mb-2">
-                    @if (is_array(json_decode($item->gambar)))
-                        <img src="{{ asset('img/berita/' . json_decode($item->gambar)[0]) }}" class="col-4"
-                            style="object-fit: cover; object-position: center"
-                            alt="{{ asset('img/berita/' . json_decode($item->gambar)[0]) }}">
-                    @else
-                        <img src="{{ asset('img/berita/' . json_decode($item->gambar)) }}" class="col-4"
-                            style="object-fit: cover; object-position: center"
-                            alt="{{ asset('img/berita/' . json_decode($item->gambar)) }}">
-                    @endif
-                    <div class="col-8">
-                        @php
-                            if (strlen($item->judul) > 70) {
-                                $judul = substr(strip_tags($item->judul), 0, 70);
-                                $judul .= '...';
-                            } else {
-                                $judul = strip_tags($item->judul);
-                            }
-                        @endphp
-                        <h6>
-                            @if (Auth::check())
-                                @if (Auth::user()->role == 'admin')
-                                    <a href="{{ route('admin.berita.edit', $item->slug) }}"
-                                        class="text-decoration-none text-dark">
-                                        {{ $judul }}
-                                    </a>
-                                @else
-                                    <a href="{{ route('user.berita.detail', $item->slug) }}"
-                                        class="text-decoration-none text-dark">
-                                        {{ $judul }}
-                                    </a>
-                                @endif
-                            @else
-                                <a href="{{ route('guest.berita.detail', $item->slug) }}"
-                                    class="text-decoration-none text-dark">
-                                    {{ $judul }}
-                                </a>
-                            @endif
-                        </h6>
-                        <hr>
-                        {{-- created at --}}
-                        <small>
-                            <i class="fas fa-clock"></i>
-                            {{ $item->created_at->diffForHumans() }}
-                        </small>
-                    </div>
-                </div>
-            @empty
-                <small>
-                    <i class="fas fa-exclamation-circle"></i>
-                    Belum ada berita
-                </small>
-            @endforelse
-        </div>
-    </div>
-
-    <h4>Berita Daerah {{ $kecamatanPopularName }}</h4>
-    <div class="row flex-row-reverse">
-        @php
-            $latest = $berita
-                ->where('kecamatan_id', $kecamatanPopulerId)
-                ->sortByDesc('created_at')
-                ->first();
-        @endphp
-        @if ($latest)
-            <div class="col-md-7 mb-5">
-                @if (is_array(json_decode($latest->gambar)))
-                    <div style="margin-bottom: 15px" id="carouselExampleControls3" class="carousel slide"
-                        data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            @foreach (json_decode($latest->gambar) as $item)
-                                <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                                    <img src="{{ asset('img/berita/' . $item) }}" class="d-block w-100"
-                                        style="height: 300px; object-fit: cover; object-position: center"
-                                        alt="{{ asset('img/berita/' . $item) }}">
-                                </div>
-                            @endforeach
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls3"
-                            data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden"></span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls3"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden"></span>
-                        </button>
-                    </div>
-                @else
-                    <img src="{{ asset('img/berita/' . json_decode($latest->gambar)) }}" class="card-img-top mb-3"
-                        style="height: 300px; object-fit: cover; object-position: center"
-                        alt="{{ asset('img/berita/' . json_decode($latest->gambar)) }}">
-                @endif
-
-                <h5>
-                    {{ $latest->judul }}
-                </h5>
-                {{-- Created at --}}
-                <h6 class="text-muted mt-3">
-                    {{-- icon --}}
-                    <i class="fas fa-clock"></i>
-                    {{ $latest->created_at->diffForHumans() }}
-                    <i class="me-3"></i>
-                    {{-- icon comment --}}
-                    <i class="fas fa-comment"></i>
-                    {{ count($latest->komentar) }}
-                    <i class="me-3"></i>
-                    {{-- love icon --}}
-                    <i class="fas fa-heart"></i>
-                    {{ $latest->like }}
-                </h6>
-
-                <p>
-                    @php
-                        $isi = strip_tags($latest->isi);
-                        $isi = substr($isi, 0, 500);
-                    @endphp
-                    {{ $isi }}...
-                </p>
-
-                {{-- button read more --}}
-                @if (Auth::check())
-                    @if (Auth::user()->role == 'admin')
-                        <a href="{{ route('admin.berita.edit', $latest->slug) }}"
-                            class="btn btn-outline-primary app-color-primary">Read More</a>
-                    @else
-                        <a href="{{ route('user.berita.detail', $latest->slug) }}"
-                            class="btn btn-outline-primary app-color-primary">Read More</a>
-                    @endif
-                @else
-                    <a href="{{ route('guest.berita.detail', $latest->slug) }}"
-                        class="btn btn-outline-primary app-color-primary">Read More</a>
-                @endif
-            </div>
-        @endif
-
-        {{-- list berita lainnya --}}
-        <div class="col-md-5 mb-5">
-            @php
-                // ambil data tanpa data yang paling populer
-                if ($latest != null) {
-                    $data = $kabupaten->where('id', $latest->kecamatan->kabupaten->id);
-                    $data = $data->first()->kecamatan->sortByDesc('created_at');
-                } else {
-                    $data = [];
-                }
-                $data2 = [];
-                foreach ($data as $key => $value) {
-                    // check if this kecamatan have berita
-                    if ($value->berita->count() == 0) {
-                        // delete this kecamatan
-                        unset($data[$key]);
-                    } else {
-                        // get the all berita
-                        foreach ($value->berita as $key2 => $value2) {
-                            if ($value2->status == 'publish' && $value2->id != $latest->id) {
-                                array_push($data2, $value2);
-                            }
-                        }
-                    }
-                }
-            @endphp
-            @forelse ($data2 as $item)
                 <div class="row mb-2">
                     @if (is_array(json_decode($item->gambar)))
                         <img src="{{ asset('img/berita/' . json_decode($item->gambar)[0]) }}" class="col-4"

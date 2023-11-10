@@ -24,6 +24,10 @@ class Role
             return $next($request);
         } else if ($request->user()->level == 'reporter' && Route::is('reporter*')) {
             return $next($request);
+        } else if ($request->user()->level == 'jurnalis' && Route::is('jurnalis*')) {
+            return $next($request);
+        } else if ($request->user()->level == 'user' && Route::is('user*')) {
+            return $next($request);
         } else {
             abort(403);
         }

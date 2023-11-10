@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [Controller::class, 'index'])->middleware('guest')->name('landing');
 Route::get('/auth', [Controller::class, 'auth'])->middleware('guest')->name('auth');
 Route::post('/login', [Controller::class, 'login'])->middleware('guest')->name('login');
+Route::get('/register', [Controller::class, 'register'])->middleware('guest')->name('register');
+Route::post('/register', [Controller::class, 'registerProses'])->middleware('guest')->name('register.proses');
 Route::get('/logout', [Controller::class, 'logout'])->middleware('auth')->name('logout');
 Route::get('/about', [Controller::class, 'about'])->name('about');
 
@@ -30,6 +32,16 @@ Route::middleware(['guest'])->name('guest')->prefix('/guest')->group(function ()
     Route::get('/berita/tag/{slug}', [Controller::class, 'beritaTag'])->name('.berita.tag');
     Route::get('/berita/kabupaten/{slug}', [Controller::class, 'beritaKabupaten'])->name('.berita.kabupaten');
     Route::get('/berita/kecamatan/{slug}', [Controller::class, 'beritaKecamatan'])->name('.berita.kecamatan');
+});
+
+// user
+Route::middleware(['auth'])->group(function () {
+    // likeing berita
+    Route::post('/like/{id}', [Controller::class, 'like'])->name('like');
+    // get like
+    Route::get('/get-like/{id}', [Controller::class, 'getLike'])->name('get.like');
+    // comment berita
+    Route::post('/comment/{id}', [Controller::class, 'comment'])->name('comment');
 });
 
 
@@ -92,6 +104,16 @@ Route::middleware(['auth', 'role'])->name('admin')->prefix('/admin')->group(func
         Route::post('/{id}/edit', [AdminController::class, 'programUpdate'])->name('.update');
         Route::delete('/{id}/delete', [AdminController::class, 'programDelete'])->name('.delete');
     });
+
+    // Management Sponsor
+    Route::prefix('/management-sponsor')->name('.management-sponsor')->group(function () {
+        Route::get('/', [AdminController::class, 'managementSponsor'])->name('.index');
+        Route::get('/create', [AdminController::class, 'managementSponsorCreate'])->name('.create');
+        Route::post('/create', [AdminController::class, 'managementSponsorStore'])->name('.store');
+        Route::get('/{id}/edit', [AdminController::class, 'managementSponsorEdit'])->name('.edit');
+        Route::post('/{id}/edit', [AdminController::class, 'managementSponsorUpdate'])->name('.update');
+        Route::delete('/{id}/delete', [AdminController::class, 'managementSponsorDelete'])->name('.delete');
+    });
 });
 
 Route::middleware(['auth', 'role'])->name('redaksi')->prefix('redaksi')->group(function () {
@@ -138,4 +160,10 @@ Route::middleware(['auth', 'role'])->name('reporter')->prefix('reporter')->group
         // upload image ckeditor
         Route::post('/upload', [ReporterController::class, 'upload'])->name('.upload');
     });
+});
+
+// user
+Route::middleware(['auth', 'role'])->name('user')->prefix('user')->group(function () {
+    Route::get('/home', [Controller::class, 'index'])->name('.home');
+    Route::get('/berita/{slug}', [Controller::class, 'beritaDetail'])->name('.berita.detail');
 });

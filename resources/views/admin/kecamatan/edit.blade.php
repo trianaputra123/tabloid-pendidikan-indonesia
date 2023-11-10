@@ -16,7 +16,7 @@
     </div>
 
     <div class="container">
-        <form action="{{ route('admin.kecamatan.update', $kecamatan->id) }}" method="post">
+        <form action="{{ route('admin.kecamatan.update', $kecamatan->id) }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label for="nama_kecamatan1" class="form-label">Nama kecamatan</label>
@@ -46,6 +46,27 @@
                 </select>
             </div>
 
+            {{-- preview gambar --}}
+            <div class="mb-3">
+                <label for="fso" class="form-label">Preview Gambar</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="{{ asset('storage/' . $kecamatan->gambar) }}" alt=""
+                            class="img-fluid img-preview">
+                    </div>
+                </div>
+            </div>
+
+            {{-- insert gambar --}}
+            <div class="mb-3">
+                <label for="fso" class="form-label">File Foto</label>
+                <input type="file" name="gambar" class="form-control" id="fso" aria-describedby="kabupatenHelp"
+                    onchange="previewImg()">
+                <div id="kabupatenHelp" class="form-text">
+                    Masukkan File Foto Program.
+                </div>
+            </div>
+
 
             <button type="submit" class="btn btn-primary">Submit</button>
 
@@ -59,5 +80,21 @@
         $(document).ready(function() {
             $('#kabupaten').select2();
         });
+    </script>
+
+    {{-- preview gambar --}}
+    <script>
+        function previewImg() {
+            const gambar = document.querySelector('#fso');
+            const gambarLabel = document.querySelector('.img-preview');
+            gambarLabel.style.display = 'block';
+
+            const fileGambar = new FileReader();
+            fileGambar.readAsDataURL(gambar.files[0]);
+
+            fileGambar.onload = function(e) {
+                gambarLabel.src = e.target.result;
+            }
+        }
     </script>
 @endsection

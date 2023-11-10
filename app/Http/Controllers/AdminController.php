@@ -7,7 +7,9 @@ use App\Models\Kabupaten;
 use App\Models\Kecamatan;
 use App\Models\Program;
 use App\Models\SistemInformasi;
+use App\Models\Sponsor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class AdminController extends Controller
@@ -111,8 +113,17 @@ class AdminController extends Controller
     {
         $request->validate([
             'nama_kecamatan' => 'required|unique:kecamatans,nama_kecamatan',
-            'kabupaten_id' => 'required'
+            'kabupaten_id' => 'required',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
+
+        if ($request->gambar) {
+            // upload image
+            $imageName = time() . '.' . $request->gambar->extension();
+            $request->gambar->move(public_path('img/kecamatan'), $imageName);
+        } else {
+            $imageName = null;
+        }
 
         // make slug
         $slug = Str::slug($request->nama_kecamatan);
@@ -120,7 +131,8 @@ class AdminController extends Controller
         Kecamatan::create([
             'nama_kecamatan' => $request->nama_kecamatan,
             'slug' => $slug,
-            'kabupaten_id' => $request->kabupaten_id
+            'kabupaten_id' => $request->kabupaten_id,
+            'gambar' => $imageName
         ]);
 
         return redirect()->route('admin.kecamatan.index')->with('success', 'Data berhasil ditambahkan');
@@ -140,8 +152,22 @@ class AdminController extends Controller
     {
         $request->validate([
             'nama_kecamatan' => 'required|unique:kecamatans,nama_kecamatan,' . $id,
-            'kabupaten_id' => 'required'
+            'kabupaten_id' => 'required',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
+
+        if ($request->gambar) {
+            // upload image
+            $imageName = time() . '.' . $request->gambar->extension();
+            $request->gambar->move(public_path('img/kecamatan'), $imageName);
+
+            // delete image
+            if (Kecamatan::findOrFail($id)->gambar) {
+                unlink(public_path('img/kecamatan/' . Kecamatan::findOrFail($id)->gambar));
+            }
+        } else {
+            $imageName = Kecamatan::findOrFail($id)->gambar;
+        }
 
         // make slug
         $slug = Str::slug($request->nama_kecamatan);
@@ -149,7 +175,8 @@ class AdminController extends Controller
         Kecamatan::findOrFail($id)->update([
             'nama_kecamatan' => $request->nama_kecamatan,
             'slug' => $slug,
-            'kabupaten_id' => $request->kabupaten_id
+            'kabupaten_id' => $request->kabupaten_id,
+            'gambar' => $imageName
         ]);
 
         return redirect()->route('admin.kecamatan.index')->with('success', 'Data berhasil diubah');
@@ -158,6 +185,10 @@ class AdminController extends Controller
     public function kecamatanDelete($id)
     {
         $kecamatan = Kecamatan::findOrFail($id);
+        // delete image
+        if ($kecamatan->gambar) {
+            unlink(public_path('img/kecamatan/' . $kecamatan->gambar));
+        }
         $kecamatan->delete();
 
         return redirect()->route('admin.kecamatan.index')->with('success', 'Data berhasil dihapus');
@@ -510,5 +541,54 @@ class AdminController extends Controller
         $program->delete();
 
         return redirect()->route('admin.program.index')->with('success', 'Data berhasil dihapus');
+    }
+
+    // managemen sponsor
+    public function managementSponsor()
+    {
+        $data = [
+            'title' => 'Admin || Management Sponsor',
+            'sponsor' => Sponsor::all()
+        ];
+        return view('admin.management-sponsor.index', $data);
+    }
+
+    public function managementSponsorCreate()
+    {
+        $data = [
+            'title' => 'Admin || Management Sponsor || Create'
+        ];
+        return view('admin.management-sponsor.create', $data);
+    }
+
+    public function managementSponsorStore(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|unique:sponsors,nama',
+            'gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'link' => 'required',
+        ]);
+
+        try {
+            DB::beginTransaction();
+            // make slug
+            $slug = Str::slug($request->nama . '-' . time());
+
+            // upload image
+            $imageName = time() . '.' . $request->gambar->extension();
+            $request->gambar->move(public_path('img/sponsor'), $imageName);
+
+            Sponsor::create([
+                'nama' => $request->nama,
+                'gambar' => $imageName,
+                'link' => $request->link,
+            ]);
+
+            DB::commit();
+            return redirect()->route('admin.management-sponsor.index')->with('success', 'Data berhasil ditambahkan');
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return redirect()->route('admin.management-sponsor.index')->with('error', 'Data gagal ditambahkan');
+        }
     }
 }

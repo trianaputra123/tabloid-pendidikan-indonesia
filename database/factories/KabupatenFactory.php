@@ -79,7 +79,7 @@ class KabupatenFactory extends Factory
         self::$order++;
 
         return [
-            'nama_kabupaten' => strtolower($data['name']),
+            'nama_kabupaten' => $data['name'],
             'slug' => Str::slug($data['name']),
         ];
     }

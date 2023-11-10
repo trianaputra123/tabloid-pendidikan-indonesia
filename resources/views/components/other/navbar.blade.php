@@ -17,7 +17,8 @@
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                     @foreach ($item->kecamatan as $kecamatan)
-                        <li><a class="dropdown-item" href="#">{{ $kecamatan->nama_kecamatan }}</a>
+                        <li><a class="dropdown-item"
+                                href="{{ route('guest.berita.kecamatan', $kecamatan->slug) }}">{{ $kecamatan->nama_kecamatan }}</a>
                         </li>
                     @endforeach
                 </ul>
