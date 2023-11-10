@@ -1,0 +1,116 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Dokumentasi API",
+        "description": "Lorem Ipsum",
+        "contact": {
+            "email": "hi.triana@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api/v1",
+            "description": "Demo API Server"
+        }
+    ],
+    "paths": {
+        "/kategori-Sekapursirih": {
+            "get": {
+                "tags": [
+                    "Sekapursirih"
+                ],
+                "summary": "Kategori Sekapursirih",
+                "description": "Mengambil Data Kategori Sekapursirih",
+                "operationId": "kategoriSekapursirih",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "success": true,
+                                    "message": "Berhasil mengambil Kategori Sekapursirih",
+                                    "data": [
+                                        {
+                                            "id": "1",
+                                            "nama_kategori": "Ucapan"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "Sekapursirih"
+                ],
+                "summary": "Login Admin",
+                "description": "Login Admin",
+                "operationId": "login",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "email address",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "meta": {
+                                        "code": 200,
+                                        "status": "success",
+                                        "message": "Authenticated"
+                                    },
+                                    "data": {
+                                        "acces_token": "01|xxxxACCESSTOKEN",
+                                        "token_type": "Bearer",
+                                        "user": {
+                                            "id": 1,
+                                            "name": "triana",
+                                            "email": "triana@gmail.com",
+                                            "role": "Admin"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        }
+    }
+}

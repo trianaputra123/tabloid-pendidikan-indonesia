@@ -34,3 +34,9 @@ Route::get('/get-liputan-by-id/{id}', [ApiUser::class, 'getLiputanById'])->name(
 // Route::middleware('auth:sanctum')->group(function () {
 Route::post('/upload-berita', [\App\Http\Controllers\ApiUser::class, 'uploadBerita'])->name('api.upload.berita');
 // });
+
+Route::group(['prefix' => 'v1'], function () {
+    Route::get('kategori-Sekapursirih', [KategoriSekapursirihtaController::class, 'listKategoriSekapursirih']);
+    // Route::post('sekapursirih', [SekapursirihController::class, 'store']);
+});
+
