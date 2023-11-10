@@ -21,7 +21,7 @@
 @endsection
 
 @section('content')
-    <div class="row">
+    <div class="row my-5">
         <div class="col-md-9">
             <div class="bg-light">
                 <div class="d-flex">
@@ -50,8 +50,39 @@
                 </p>
 
                 <div class="mt-3">
-                    <img src="{{ asset('img/berita/' . $berita->gambar) }}" style="width: 50%; float: left" class="me-3"
-                        alt="{{ $berita->gambar }}">
+                    {{-- <img src="{{ asset('img/berita/' . $berita->gambar) }}" style="width: 50%; float: left" class="me-3"
+                        alt="{{ $berita->gambar }}"> --}}
+                    @if ($berita->gambar != null)
+                        {{-- slider --}}
+                        @if (is_array(json_decode($berita->gambar)))
+                            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    @foreach (json_decode($berita->gambar) as $item)
+                                        <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                                            <img src="{{ asset('img/berita/' . $item) }}" class="d-block w-100"
+                                                style="height: 400px; object-fit: cover; object-position: center"
+                                                alt="{{ asset('img/berita/' . $item) }}">
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden"></span>
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                    data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden"></span>
+                                </button>
+                            </div>
+                        @else
+                            <img src="{{ asset('img/berita/' . json_decode($berita->gambar)) }}"
+                                style="width: 50%; float: left" class="me-3" alt="{{ $berita->gambar }}">
+                        @endif
+                    @else
+                        <img src="" alt="" id="preview" class="img-fluid">
+                    @endif
 
                     <div class="mt-3">
                         {!! $berita->isi !!}
@@ -75,7 +106,8 @@
 
 
                 @forelse ($beritaKecamatan as $item)
-                    <a href="{{ route('guest.berita.detail', $item->slug) }}" class="row mb-3 text-decoration-none hover-a">
+                    <a href="{{ route('guest.berita.detail', $item->slug) }}"
+                        class="row mb-3 text-decoration-none hover-a">
                         <div class="col-7 my-1">
                             <b>
                                 {{ $item->judul }}

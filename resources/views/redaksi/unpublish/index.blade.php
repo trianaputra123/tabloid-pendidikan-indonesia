@@ -80,7 +80,7 @@
         </h4>
 
         {{-- datatable --}}
-        <table id="table" class="table table-striped table-bordered">
+        <table id="table2" class="table table-striped table-bordered">
             <thead>
                 <tr>
                     <th>No</th>
@@ -135,6 +135,10 @@
     <script>
         $(document).ready(function() {
             $('#table').DataTable();
+        });
+
+        $(document).ready(function() {
+            $('#table2').DataTable();
         });
     </script>
 @endsection

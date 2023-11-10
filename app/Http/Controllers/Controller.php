@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Berita;
 use App\Models\HariPeringatan;
 use App\Models\Kabupaten;
+use App\Models\Kecamatan;
 use App\Models\Program;
 use App\Models\SekapurSirih;
 use App\Models\SistemInformasi;
+use App\Models\Sponsor;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -36,6 +38,7 @@ class Controller extends BaseController
             'sekaps' => SekapurSirih::get()->first(),
             'kecamatanPopulerId' => $kecamatanPopulerId ? $kecamatanPopulerId->kecamatan->id : null,
             'kecamatanPopularName' => $kecamatanPopulerId ? $kecamatanPopulerId->kecamatan->nama_kecamatan : null,
+            'sponsors' => Sponsor::all(),
         ];
         return view('index', $data);
     }
@@ -48,6 +51,38 @@ class Controller extends BaseController
             'berita' => Berita::where('slug', $slug)->firstOrFail(),
         ];
         return view('detail-berita', $data);
+    }
+
+    public function beritaTag($slug)
+    {
+        $data = [
+            'title' => 'Berita Tag',
+            'kabupaten' => Kabupaten::all(),
+            'berita' => Berita::where('tag', 'like', '%' . $slug . '%')->paginate(6),
+        ];
+        return view('berita-tag', $data);
+    }
+
+    public function beritaKabupaten($slug)
+    {
+        $data = [
+            'title' => 'Berita Kabupaten',
+            'kabupaten' => Kabupaten::all(),
+            'berita' => Berita::where('kabupaten_id', Kabupaten::where('slug', $slug)->firstOrFail()->id)->paginate(6),
+        ];
+        return view('berita-kabupaten', $data);
+    }
+
+    public function beritaKecamatan($slug)
+    {
+        $data = [
+            'title' => 'Berita Kecamatan',
+            'kabupaten' => Kabupaten::all(),
+            'berita' => Berita::where('kecamatan_id', Kecamatan::where('slug', $slug)->firstOrFail()->id)->get(),
+            'kecamatan_now' => Kecamatan::where('slug', $slug)->firstOrFail(),
+            'sponsors' => Sponsor::all(),
+        ];
+        return view('berita-kecamatan', $data);
     }
 
     public function auth()

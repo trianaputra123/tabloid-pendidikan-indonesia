@@ -98,7 +98,8 @@
             </nav>
 
             {{-- content --}}
-            <div class="container-fluid px-0 py-5" style="height: 100vh; overflow-y: auto">
+            <div class="container-fluid px-0 pb-5" style="height: 100vh; overflow-y: auto">
+                @yield('hero')
                 <div class="container-fluid">
                     <div class="container">
                         @yield('content')

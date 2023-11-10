@@ -45,6 +45,10 @@
     /* background-color: #a4dffcb7; */
 }
 
+.app-overlay-dark-bg {
+    background-color: #000000b7;
+}
+
 .app-base-80-bg {
     background-color: #ABCDD8;
 }

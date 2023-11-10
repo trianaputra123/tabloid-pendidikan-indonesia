@@ -101,6 +101,16 @@ Route::middleware(['auth', 'role'])->name('admin')->prefix('/admin')->group(func
         Route::post('/{id}/edit', [AdminController::class, 'programUpdate'])->name('.update');
         Route::delete('/{id}/delete', [AdminController::class, 'programDelete'])->name('.delete');
     });
+
+    // Management Sponsor
+    Route::prefix('/management-sponsor')->name('.management-sponsor')->group(function () {
+        Route::get('/', [AdminController::class, 'managementSponsor'])->name('.index');
+        Route::get('/create', [AdminController::class, 'managementSponsorCreate'])->name('.create');
+        Route::post('/create', [AdminController::class, 'managementSponsorStore'])->name('.store');
+        Route::get('/{id}/edit', [AdminController::class, 'managementSponsorEdit'])->name('.edit');
+        Route::post('/{id}/edit', [AdminController::class, 'managementSponsorUpdate'])->name('.update');
+        Route::delete('/{id}/delete', [AdminController::class, 'managementSponsorDelete'])->name('.delete');
+    });
 });
 
 Route::middleware(['auth', 'role'])->name('redaksi')->prefix('redaksi')->group(function () {
@@ -152,4 +162,5 @@ Route::middleware(['auth', 'role'])->name('reporter')->prefix('reporter')->group
 // user
 Route::middleware(['auth', 'role'])->name('user')->prefix('user')->group(function () {
     Route::get('/home', [Controller::class, 'index'])->name('.home');
+    Route::get('/berita/{slug}', [Controller::class, 'beritaDetail'])->name('.berita.detail');
 });

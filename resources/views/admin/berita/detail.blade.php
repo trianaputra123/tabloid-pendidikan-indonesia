@@ -48,8 +48,8 @@
                         </button>
                     </div>
                 @else
-                    <img src="{{ asset('/img/berita/' . $berita->gambar) }}" alt="" id="preview"
-                        class="img-fluid">
+                    <img src="{{ asset('/img/berita/' . json_decode($berita->gambar)) }}" alt="{{ $berita->gambar }}"
+                        id="preview" class="img-fluid">
                 @endif
             @else
                 <img src="" alt="" id="preview" class="img-fluid">
