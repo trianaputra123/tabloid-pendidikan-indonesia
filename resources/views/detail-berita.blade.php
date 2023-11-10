@@ -109,8 +109,15 @@
                     <a href="{{ route('guest.berita.detail', $item->slug) }}"
                         class="row mb-3 text-decoration-none hover-a">
                         <div class="col-7 my-1">
+                            @php
+                                if (strlen($item->judul) > 40) {
+                                    $judul = substr($item->judul, 0, 20) . '...';
+                                } else {
+                                    $judul = $item->judul;
+                                }
+                            @endphp
                             <b>
-                                {{ $item->judul }}
+                                {{ $judul }}
                             </b>
                             {{-- diff --}}
                             <p class="text-muted" style="font-size: 11px">
@@ -119,8 +126,20 @@
                         </div>
                         <div class="col-5 my-1">
                             {{-- gambar --}}
-                            <img src="{{ asset('img/berita/' . $item->gambar) }}" class="w-100 img-fluid img-thumbnail"
-                                alt="">
+                            @if ($item->gambar != null)
+                                {{-- slider --}}
+                                @if (is_array(json_decode($item->gambar)))
+                                    <img src="{{ asset('img/berita/' . json_decode($item->gambar)[0]) }}"
+                                        class="w-100 img-fluid img-thumbnail"
+                                        alt="{{ asset('img/berita/' . json_decode($item->gambar)[0]) }}">
+                                @else
+                                    <img src="{{ asset('img/berita/' . json_decode($item->gambar)) }}"
+                                        class="w-100 img-fluid img-thumbnail" alt="">
+                                @endif
+                            @else
+                                <img src="{{ asset('img/berita/' . $item->gambar) }}" class="w-100 img-fluid img-thumbnail"
+                                    alt="{{ asset('img/berita/' . $item->gambar) }}">
+                            @endif
                         </div>
                     </a>
                 @empty
