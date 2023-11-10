@@ -184,6 +184,7 @@ class Controller extends BaseController
                 return response()->json([
                     'status' => true,
                     'message' => 'Berhasil unlike berita.',
+                    'like' => false,
                 ], 200);
             } else {
                 // like
@@ -197,6 +198,7 @@ class Controller extends BaseController
                 return response()->json([
                     'status' => true,
                     'message' => 'Berhasil like berita.',
+                    'like' => true,
                 ], 200);
             }
         } catch (\Throwable $th) {

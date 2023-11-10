@@ -36,9 +36,12 @@ Route::middleware(['guest'])->name('guest')->prefix('/guest')->group(function ()
 
 // user
 Route::middleware(['auth'])->group(function () {
+    // likeing berita
     Route::post('/like/{id}', [Controller::class, 'like'])->name('like');
     // get like
     Route::get('/get-like/{id}', [Controller::class, 'getLike'])->name('get.like');
+    // comment berita
+    Route::post('/comment/{id}', [Controller::class, 'comment'])->name('comment');
 });
 
 

@@ -44,10 +44,6 @@
                     {{ $berita->created_at->isoFormat('dddd, D MMMM Y HH:mm') }}
                 </p>
                 <hr>
-                {{-- author --}}
-                <p>
-                    <i class="fas fa-user"></i> {{ $berita->user->name }}
-                </p>
 
                 <div class="mt-3">
                     {{-- <img src="{{ asset('img/berita/' . $berita->gambar) }}" style="width: 50%; float: left" class="me-3"
@@ -84,10 +80,52 @@
                         <img src="" alt="" id="preview" class="img-fluid">
                     @endif
 
+                    {{-- author --}}
+                    <p class="mt-3">
+                        <span class="text-muted">Dibuat oleh :</span> {{ $berita->user->name }}
+                        <i class="me-3"></i>
+                        {{-- icon comment --}}
+                        <i class="fas fa-comment text-muted"></i>
+                        {{ count($berita->komentar) }}
+                        <i class="me-3"></i>
+                        {{-- love icon and can be clicked if user already login --}}
+                        @if (Auth::check())
+                            @if (Auth::user()->likes->where('berita_id', $berita->id)->first())
+                                <button type="button" style="background: transparent; border: none;" id="like-button"><i
+                                        class="fas fa-heart text-danger"></i></button>
+                            @else
+                                <button type="button" style="background: transparent; border: none;" id="like-button"><i
+                                        class="far fa-heart text-muted"></i></button>
+                            @endif
+                        @else
+                            <a href="{{ route('login') }}" class="far fa-heart text-muted"></a>
+                        @endif
+                        <span id="like-text">{{ $berita->like }}</span>
+                    </p>
+
+                    <hr>
+
                     <div class="mt-3">
                         {!! $berita->isi !!}
                     </div>
                 </div>
+            </div>
+            {{-- comment sesction --}}
+            <div class="p-3 border mt-3">
+                <h5>Kolom Komentar</h5>
+                <hr>
+                {{-- comment form --}}
+                <form action="{{ route('comment', $berita->id) }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="komentar" class="form-label">Komentar</label>
+                        <textarea class="form-control" id="komentar" rows="3" name="komentar"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Kirim</button>
+                </form>
+                <hr>
+                {{-- comment list --}}
+
             </div>
         </div>
         <div class="col-md-3">
@@ -170,4 +208,41 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('other-js')
+    <script>
+        $(document).ready(function() {
+            // like button
+            $('#like-button').click(function() {
+                console.log('like');
+                var likeText = $('#like-text').text();
+                likeText = parseInt(likeText);
+                $.ajax({
+                    url: "{{ route('like', $berita->id) }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                    },
+                    success: function(response) {
+                        if (response.status) {
+                            // chack if user already like berita
+                            if (response.like) {
+                                $('#like-button').children().removeClass('text-muted').addClass(
+                                    'text-danger');
+                                // change text
+                                $('#like-text').text(likeText + 1);
+                            } else {
+                                $('#like-button').children().removeClass('text-danger')
+                                    .addClass(
+                                        'text-muted');
+                                // change text
+                                $('#like-text').text(likeText - 1);
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 @endsection
